@@ -234,7 +234,7 @@ public class GameScenePanel : UIBase
     public void ResetGame()
     {
         TrackLevelExit("settle_next_level");
-        Refresh();
+        Refresh(); 
     }
 
     public override void Refresh(object data = null)
@@ -369,12 +369,31 @@ public class GameScenePanel : UIBase
                     isPause = false;
                     GameManager.Instance.EvaluationGameCallback?.Invoke();
                     GameManager.Instance.EvaluationGameCallback = null;
+
+                    GuideTxBtn();
                 });
             }
             else
             {
                 GameManager.Instance.EvaluationGameCallback?.Invoke();
                 GameManager.Instance.EvaluationGameCallback = null;
+
+                GuideTxBtn();
+            }
+        }
+    }
+
+    private void GuideTxBtn()
+    {
+        if (GameManager.Instance.playerInfo.level == 5)
+        {
+            if (TxElementMananger.Instance != null)
+            {
+                string firstGame = PlayerPrefs.GetString("Guide_TxBtn", "");
+                if (string.IsNullOrEmpty(firstGame))
+                {
+                    UIManager.Instance.OpenUI<GuidePanel_TxBtn>();
+                }
             }
         }
     }

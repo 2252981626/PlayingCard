@@ -23,6 +23,7 @@ public class GuidePanel_TxPanel2 : UIBase
             OtherSdkManager.Instance.CustomEvent("newbie_guide_4_complete", "step", "4");
 
             PlayerPrefs.SetString("Guide_TxPanel2", "yes");
+            UIManager.Instance.GetUI<TxElementPanel>().btn.interactable = true;
             UIManager.Instance.GetUI<TxElementPanel>().btn.onClick.Invoke();
             Hide();
         });

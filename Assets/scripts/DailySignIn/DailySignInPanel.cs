@@ -86,15 +86,7 @@ public class DailySignInPanel : UIBase
     {
         callback = () =>
         {
-            if (TxElementMananger.Instance != null)
-            {
-                string firstGame = PlayerPrefs.GetString("Guide_TxBtn", "");
-                if (string.IsNullOrEmpty(firstGame))
-                {
-                    UIManager.Instance.OpenUI<GuidePanel_TxBtn>();
-                }
-            }
-
+            UIManager.Instance.GetUI<LobbyScenePanel>().lobbyLevelPanel.EnterGame();
         };
         base.Hide();
     }

@@ -80,6 +80,10 @@ public class TxElementPanel : UIBase
             {
                 callback = () =>
                 {
+                    if(GameManager.Instance.gameType == GameType.MainGame || GameManager.Instance.gameType == GameType.DailyGame)
+                    {
+                        return;
+                    }
                     UIManager.Instance.GetUI<LobbyScenePanel>().lobbyLevelPanel.EnterGame();
                 };
                 Hide();
@@ -136,8 +140,10 @@ public class TxElementPanel : UIBase
         else
         {
             btnStr.text = LanguageManager.Instance.GetText("PLAY");
-            btn.interactable = GameManager.Instance.gameType == GameType.LobbyScene;
-            canvasGroup.alpha = GameManager.Instance.gameType == GameType.LobbyScene ? 1f : 0.5f;
+            btn.interactable = true;
+            canvasGroup.alpha = 1f;
+            //btn.interactable = GameManager.Instance.gameType == GameType.LobbyScene;
+            //canvasGroup.alpha = GameManager.Instance.gameType == GameType.LobbyScene ? 1f : 0.5f;
         }
   
 
@@ -150,13 +156,18 @@ public class TxElementPanel : UIBase
         cnt2.text = unit + txInfoData.mCnt.ToString();
         cnt3.text = txInfoData.avgCnt.ToString();
 
-        string firstGame = PlayerPrefs.GetString("Guide_TxPanel", "");
-        if (string.IsNullOrEmpty(firstGame))
+
+        string Guide_TxBtnStr = PlayerPrefs.GetString("Guide_TxBtn", "");
+        if (!string.IsNullOrEmpty(Guide_TxBtnStr))
         {
-            DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
+            string Guide_TxPanelStr = PlayerPrefs.GetString("Guide_TxPanel", "");
+            if (string.IsNullOrEmpty(Guide_TxPanelStr))
             {
-                UIManager.Instance.OpenUI<GuidePanel_TxPanel>();
-            });
+                DOTween.Sequence().AppendInterval(0.5f).AppendCallback(() =>
+                {
+                    UIManager.Instance.OpenUI<GuidePanel_TxPanel>();
+                });
+            }
         }
     }
 

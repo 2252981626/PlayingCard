@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{2E909B1B-6320-529C-2AC4-C6CE8FEDE2A3}</ProjectGuid>
+    <ProjectGuid>{E274DCEC-5595-99CF-49C6-9752F5B298E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Locus.UnityTesting.Editor</AssemblyName>
@@ -1082,7 +1082,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Locus.Editor.csproj">
-      <Project>{5861DAC1-22A5-C978-FEAA-76EC2AABF38B}</Project>
+      <Project>{218F374A-47BB-5392-E6CC-4D8C0139054C}</Project>
       <Name>Locus.Editor</Name>
     </ProjectReference>
   </ItemGroup>

@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{5861DAC1-22A5-C978-FEAA-76EC2AABF38B}</ProjectGuid>
+    <ProjectGuid>{218F374A-47BB-5392-E6CC-4D8C0139054C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Locus.Editor</AssemblyName>
