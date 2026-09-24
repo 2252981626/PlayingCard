@@ -1,0 +1,45 @@
+# Unity核心缓存（必须忽略，解决你当前的问题）
+Library/
+# Unity临时文件
+Temp/
+Obj/
+
+# 个人编辑器设置（不同开发者不一样）
+UserSettings/
+# 日志文件
+Logs/
+
+# 打包安装包（可选，避免提交大文件）
+*.apk
+*.aab
+*.exe
+*.ipa
+.vs/
+*.suo
+# 系统临时文件
+.DS_Store
+Thumbs.db
+
+# AI 助手工作区数据（本地笔记，不随仓库分发）
+.workbuddy-ai/
+
+# ============================================================
+# Firebase SDK：平台专用大体积二进制（不纳入版本库）
+# ------------------------------------------------------------
+# 说明：Firebase Unity SDK 通过 .unitypackage 导入后，会在
+# Assets/Firebase 下同时释放「全平台」原生库。本项目 CI 只打
+# Android 包，下列文件对 Android 构建完全无用，但体积巨大
+# （约 360MB），因此不提交。新机器克隆后如需构建对应平台，
+# 请重新导入 Firebase SDK。详见 README.md。
+# ============================================================
+
+# 桌面端 (Standalone / Windows / macOS / Linux) 原生库 —— 约 300MB
+/Assets/Firebase/Plugins/x86_64/
+/Assets/Firebase/Plugins/x86_64.meta
+
+# Apple 平台静态库（仅 iOS / tvOS 构建使用）
+/Assets/Firebase/Plugins/iOS/*.a
+/Assets/Plugins/iOS/
+/Assets/Plugins/iOS.meta
+/Assets/Plugins/tvOS/
+/Assets/Plugins/tvOS.meta

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8178345401660826325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5967607293446334371}
+  - component: {fileID: 4547784435484087077}
+  m_Layer: 0
+  m_Name: TxElementMananger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5967607293446334371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8178345401660826325}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4547784435484087077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8178345401660826325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61dfeb8a70a32a344a2bae461ab9c1dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TxProgressPrefab: {fileID: 3726803762691054979, guid: 3b4804ab15c31fc46a15198f6d4c7dd9, type: 3}
+  accountTypeSprites:
+  - {fileID: 21300000, guid: a08e129c794ca2842b276abbd1ba6371, type: 3}
+  - {fileID: 21300000, guid: 42fc8cc249826b2449658ff9da6b003f, type: 3}
+  - {fileID: 21300000, guid: 65c7bc2976b465c479fe46a9efebf1ba, type: 3}
+  - {fileID: 21300000, guid: e71a4217330cde4418308ee4b9a78a86, type: 3}
+  - {fileID: 21300000, guid: e5017842ab89b26448e7987cda600475, type: 3}
+  - {fileID: 21300000, guid: a1b844fb842850b42a6624195b926eaa, type: 3}
+  - {fileID: 21300000, guid: 0e41ce67d2cd8dc4aa504d8fbfb07ba4, type: 3}
+  - {fileID: 21300000, guid: c62a7d69cdda04542936744be65ad1ec, type: 3}

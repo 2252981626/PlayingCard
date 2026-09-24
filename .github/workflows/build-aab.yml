@@ -1,0 +1,110 @@
+name: Android 自动化打包正式 AAB 🤖
+
+on:
+  workflow_dispatch:  # 只保留手动触发
+
+jobs:
+  build:
+    name: Build Android AAB ✨
+    runs-on: ubuntu-latest
+    steps:
+      # 🚀 释放虚拟机磁盘空间
+      - name: Free Disk Space (清理磁盘空间)
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf /usr/shadowbi
+          docker image prune --all --force
+
+      # 1. 检出代码（Keystore 跟着项目一起被同步下来）
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 2. 校验 Firebase / EDM4U 依赖完整性（Android 打包必需）
+      #    这些文件必须被提交进仓库；缺失通常意味着 .gitignore 误伤或 SDK 导入不完整。
+      - name: Verify Firebase Android dependencies
+        run: |
+          fail=0
+          check() {
+            if [ -e "$1" ]; then
+              echo "  [OK]   $1"
+            else
+              echo "::error::缺少必需文件: $1"
+              fail=1
+            fi
+          }
+          echo "== 校验 Firebase Android 依赖 =="
+          check "Assets/Firebase/Plugins/Firebase.Analytics.dll"
+          check "Assets/Firebase/Plugins/Firebase.App.dll"
+          check "Assets/Firebase/Plugins/Firebase.Platform.dll"
+          check "Assets/Firebase/Plugins/Firebase.TaskExtension.dll"
+          check "Assets/Firebase/Plugins/Google.MiniJson.dll"
+          check "Assets/Firebase/Editor/Firebase.Editor.dll"
+          check "Assets/Firebase/Editor/AnalyticsDependencies.xml"
+          check "Assets/Firebase/Editor/AppDependencies.xml"
+          check "Assets/Firebase/m2repository/com/google/firebase/firebase-app-unity/13.2.0/firebase-app-unity-13.2.0.srcaar"
+          check "Assets/Firebase/m2repository/com/google/firebase/firebase-analytics-unity/13.2.0/firebase-analytics-unity-13.2.0.srcaar"
+          check "Assets/ExternalDependencyManager/Editor/Google.VersionHandler.dll"
+          check "Assets/Plugins/Android/mainTemplate.gradle"
+          check "Assets/google-services.json"
+
+          # Firebase 的 Android AAR 必须已被 EDM4U 解析并固化进 gradle 模板。
+          # 本项目关闭了 EDM4U 自动解析（GvhProjectSettings.xml 里
+          # AutoResolverEnabled=False），解析结果靠提交固化，不会在构建时自动刷新。
+          # 一旦这里失败，说明忘记跑 Force Resolve 或忘了提交解析结果。
+          echo "== 校验 mainTemplate.gradle 中的 Firebase 依赖 =="
+          for spec in "com.google.firebase:firebase-analytics" "firebase-analytics-unity" "firebase-app-unity"; do
+            if grep -q "$spec" Assets/Plugins/Android/mainTemplate.gradle; then
+              echo "  [OK]   mainTemplate.gradle 含 $spec"
+            else
+              echo "::error::mainTemplate.gradle 缺少 $spec。请在 Unity 中执行 Assets > External Dependency Manager > Android Resolver > Force Resolve，然后提交 mainTemplate.gradle 和 ProjectSettings/AndroidResolverDependencies.xml。详见 README.md。"
+              fail=1
+            fi
+          done
+
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::Firebase 依赖不完整，构建中止。请参考 README.md 的「Firebase 依赖管理说明」。"
+            exit 1
+          fi
+          echo "== 校验通过 =="
+
+      # 3. 缓存 Library 目录 (加速二次打包)
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android-AAB-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-Android-AAB-
+            Library-Android-
+
+      # 4. 开始打包（直接读取项目内的签名文件）
+      - name: Build project
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          versioning: None
+          unityVersion: 2022.3.62f3 
+          androidExportType: 'androidAppBundle'
+
+          # 🎯 修复 2：将路径指向项目 Assets 下的实际相对路径（请根据你的真实文件名修改）
+          androidKeystoreName: Assets/mySignKey.keystore
+
+          # 🔐 敏感的密码依然从 GitHub Secrets 安全拉取
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEY_ALIAS }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEY_PASS }}
+          androidTargetSdkVersion: AndroidApiLevelAuto
+
+      # 5. 上传生成的 AAB 文件
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Android-Release-AAB
+          path: build/Android

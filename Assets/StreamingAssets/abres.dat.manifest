@@ -1,0 +1,188 @@
+ManifestFileVersion: 0
+CRC: 1595119964
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: af0c536576fff1d55dbec0a2228a409f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7d5a610334f61c094f2cd3df3f2318ec
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: af0c536576fff1d55dbec0a2228a409f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 61dfeb8a70a32a344a2bae461ab9c1dc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bbb75c4d94119054687f4061136c5f64, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8875238d93ec4074a840053928b13c1d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 81f2b06ee9ab76143bc53de1005e054b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f6ea52721e5a0964db76be7847c1d8b0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bcf255b0bcb076a42b2c3d1c5b6fba68, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7ce72a5400777e54eb257da47b72ac9c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ca172b1b9ee7cb843a193c935893b1b0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7c669f8a2e93c884bb076a0ad6f6d597, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1a5ef26c16ff2c478697335a8eac253, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ebea7e0ac85df084491124f72a08ea73, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 225
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: MultilingualSpriteInfo
+- AssemblyName: Assembly-CSharp
+  ClassName: TxElementAccountInfo
+- AssemblyName: Assembly-CSharp
+  ClassName: TxElementManangerInfo
+- AssemblyName: Assembly-CSharp
+  ClassName: TxElementTaskInfo
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/EndEditEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/OnChangeEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/SubmitEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+Assets:
+- Assets/ABRes/TxElement/Texture/main/withdaw.png
+- Assets/ABRes/TxElement/Prefab/FlickerEffectAnim.anim
+- Assets/ABRes/TxElement/Texture/main/x.png
+- Assets/ABRes/TxElement/Prefab/TxElementGameStartPanel.prefab
+- Assets/ABRes/TxElement/Texture/type/8.png
+- Assets/ABRes/TxElement/Texture/type/4.png
+- Assets/ABRes/TxElement/Texture/progress/qipao.png
+- Assets/ABRes/TxElement/Texture/finalStep/tanchuang.png
+- Assets/ABRes/TxElement/Texture/progress/jindutiao.png
+- Assets/ABRes/ABResManager/Texture/chaopiaodui.png
+- Assets/ABRes/TxElement/Texture/main/CashBalance-pty.png
+- Assets/ABRes/TxElement/Texture/progress/anniu.png
+- Assets/ABRes/TxElement/Texture/finalStep/A-hui.png
+- Assets/ABRes/TxElement/Texture/tanchuang.png
+- Assets/ABRes/TxElement/Texture/type/7.png
+- Assets/ABRes/TxElement/Prefab/TxElementTypeSelectPanel.prefab
+- Assets/ABRes/TxElement/Texture/finalStep/R.png
+- Assets/ABRes/TxElement/Texture/finalStep/E-hui.png
+- Assets/ABRes/ABResManager/Texture/chaopiao.png
+- Assets/ABRes/TxElement/Texture/finalStep/FinalStep-pty.png
+- Assets/ABRes/TxElement/Texture/type/2.png
+- Assets/ABRes/TxElement/Texture/main/anniu.png
+- Assets/ABRes/TxElement/Texture/main/withdaw-pty.png
+- Assets/ABRes/ABResManager/ABResManager.prefab
+- Assets/ABRes/TxElement/Prefab/TxElementBtn.prefab
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/ChooseYourWithdrawalMethod.png
+- Assets/ABRes/TxElement/Texture/finalStep/A.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/didididi.png
+- Assets/ABRes/TxElement/Texture/main/anniu-xiao.png
+- Assets/ABRes/TxElement/Prefab/TxProgressAnim.anim
+- Assets/ABRes/TxElement/Texture/main/shengyu-di.png
+- Assets/ABRes/TxElement/Texture/main/laba.png
+- Assets/ABRes/TxElement/Texture/finalStep/G-hui.png
+- Assets/ABRes/TxElement/Texture/guang1.png
+- Assets/ABRes/TxElement/Texture/main/zhanghu-di.png
+- Assets/ABRes/TxElement/Texture/main/paypal.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/huidi.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/tanchuang.png
+- Assets/ABRes/TxElement/Texture/main/jindutiao.png
+- Assets/ABRes/TxElement/Texture/finalStep/G.png
+- Assets/ABRes/TxElement/Texture/main/xjxx-di.png
+- Assets/ABRes/TxElement/Texture/finalStep/T.png
+- Assets/ABRes/TxElement/Texture/main/ding2.png
+- Assets/ABRes/TxElement/Texture/guang2.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/anniu-lan.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/ChooseYourWithdrawalMethod-pty.png
+- Assets/ABRes/TxElement/Prefab/TxElementMananger.prefab
+- Assets/ABRes/TxElement/Texture/finalStep/T-hui.png
+- Assets/ABRes/TxElement/Texture/main/CashBalance.png
+- Assets/ABRes/TxElement/Prefab/TxProgress.prefab
+- Assets/ABRes/TxElement/Texture/main/bobao-di.png
+- Assets/ABRes/TxElement/Texture/type/5.png
+- Assets/ABRes/TxElement/Texture/baoxiang.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/cuowu.png
+- Assets/ABRes/TxElement/Texture/finalStep/E.png
+- Assets/ABRes/TxElement/Texture/type/6.png
+- Assets/ABRes/TxElement/Texture/type/1.png
+- Assets/ABRes/TxElement/Prefab/TxElementPanel.prefab
+- Assets/ABRes/TxElement/Texture/main/beijing.png
+- Assets/ABRes/TxElement/Texture/main/di.png
+- Assets/ABRes/TxElement/Texture/type/3.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/1.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/2.png
+- Assets/ABRes/TxElement/Texture/finalStep/FinalStep.png
+- Assets/ABRes/TxElement/Prefab/TxElementFinalStepPanel.prefab
+- Assets/ABRes/TxElement/Texture/main/jindutiao-di.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/xuanzhong.png
+- Assets/ABRes/TxElement/Texture/finalStep/R-hui.png
+- Assets/ABRes/TxElement/Texture/progress/jindutiao-di.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/anniu-lv.png
+- Assets/ABRes/TxElement/Texture/TypeSelectPanel/cuowu-di.png
+Dependencies: []

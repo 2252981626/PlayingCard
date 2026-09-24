@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "707411877130",
+    "project_id": "solitaire-casino-tycoon",
+    "storage_bucket": "solitaire-casino-tycoon.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707411877130:android:ce7b3bf85696c6cc956ef3",
+        "android_client_info": {
+          "package_name": "com.citydaheng.solitaire"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-ZVa1dcnjJVxWB5CNw_JmOlrKTuV2HRs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
