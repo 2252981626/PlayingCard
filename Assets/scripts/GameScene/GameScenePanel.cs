@@ -10,6 +10,7 @@ public class GameScenePanel : UIBase
 {
     public static bool isPause = true;
     public PlayingCardControl playingCardControl;
+    public PlayingCardGuide playingCardGuide;
     public Transform root;
     public Transform fapaiAnimTrans;
 
@@ -42,8 +43,6 @@ public class GameScenePanel : UIBase
     private int levelStepCount;
     public bool isEffectualSteps;
     public Action isEffectualStepAwaitCallback;
-    private bool extractGuideShown;
-    private Sequence extractGuideIdleSequence;
     private float timer;
     //--------
     public static float ScoreRate = 1;
@@ -117,6 +116,7 @@ public class GameScenePanel : UIBase
    
     public void RecordCardInteraction()
     {
+        playingCardGuide?.NotifyInteraction();
         RestartExtractGuideIdleTimer();
     }
 
@@ -126,21 +126,21 @@ public class GameScenePanel : UIBase
         invalidCardClickCount++;
         if (invalidCardClickCount >= 10)
         {
-            ShowExtractGuide();
+            playingCardGuide?.ShowExtractGuide();
         }
     }
 
     public void RecordNormalOperation()
     {
         invalidCardClickCount = 0;
-        extractGuideShown = false;
         gameSceneItem_Extract.HideGuide();
+        playingCardGuide?.NotifyInteraction();
         RestartExtractGuideIdleTimer();
     }
 
     public void OnPopupOpened()
     {
-        extractGuideIdleSequence?.Kill();
+        playingCardGuide?.Pause();
     }
 
     public void OnPopupClosed()
@@ -148,26 +148,19 @@ public class GameScenePanel : UIBase
         if (isOpen)
         {
             RestartExtractGuideIdleTimer();
+            playingCardGuide?.Resume();
         }
     }
 
     private void RestartExtractGuideIdleTimer()
     {
-        extractGuideIdleSequence?.Kill();
-        extractGuideIdleSequence = DOTween.Sequence().AppendInterval(10f).AppendCallback(ShowExtractGuide).SetTarget(transform);
+        gameSceneItem_Extract.HideGuide();
     }
 
-    private void ShowExtractGuide()
-    {
-        extractGuideShown = true;
-        gameSceneItem_Extract.ShowGuide();
-    }
 
     private void ResetExtractGuide()
     {
         invalidCardClickCount = 0;
-        extractGuideShown = false;
-        extractGuideIdleSequence?.Kill();
         gameSceneItem_Extract.HideGuide();
     }
 
@@ -250,8 +243,10 @@ public class GameScenePanel : UIBase
         isEffectualSteps = false;
         isEffectualStepAwaitCallback = null;
         ResetExtractGuide();
+        playingCardGuide?.Reset();
 
         playingCardControl.Init();
+        playingCardGuide?.Init(this);
 
         gameSceneItem_Hint.Refresh();
         gameSceneItem_Extract.Refresh();
@@ -331,6 +326,7 @@ public class GameScenePanel : UIBase
         UIManager.Instance.HideUIMask();
         isPause = false;
         RestartExtractGuideIdleTimer();
+        playingCardGuide?.StartHintTimer();
 
         string str = PlayerPrefs.GetString("GameTipsPanel", "");
         if(string.IsNullOrEmpty(str))
@@ -407,6 +403,7 @@ public class GameScenePanel : UIBase
     {
         base.Hide();
         isPause = true;
+        playingCardGuide?.Pause();
     }
 
     private void UpdateScoreUI()

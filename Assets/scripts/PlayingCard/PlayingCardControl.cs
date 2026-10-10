@@ -34,6 +34,7 @@ public class ShufflingBase
 public class PlayingCardControl : MonoBehaviour,IEventListener
 {
     public GameObject playingCardPrefab;
+    public GameObject playingCardBunshinPrefab;
     public ResiduePlayingCards residuePlayingCards;
 
     public List<PlayingCardQueue> playingCardQueues;

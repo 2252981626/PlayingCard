@@ -15,6 +15,7 @@ public class ResiduePlayingCards : MonoBehaviour
     public Transform cells;
     public Button btn;
     public Text cntText;
+    public Transform highlightBorder;
 
     public List<PlayingCard> leftCards;
     public List<PlayingCard> rightCards;

@@ -351,6 +351,7 @@ public class PlayingCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             };
         }
 
+        UIManager.Instance.GetUI<GameScenePanel>().playingCardGuide?.NotifyDragStart();
         EventManager.Instance.TriggerEvent(GameEvent.StopHintAnim);
         SetCanvasTop();
         if(playingCardQueue != null)
@@ -479,7 +480,8 @@ public class PlayingCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             UIManager.Instance.GetUI<GameScenePanel>().RecordCardInteraction();
         }
 
-        BackCorrectPosCoroutine(isRecycleDrag || !isHaveCorrect, isHaveCorrect); 
+        BackCorrectPosCoroutine(isRecycleDrag || !isHaveCorrect, isHaveCorrect);
+        UIManager.Instance.GetUI<GameScenePanel>().playingCardGuide?.NotifyDragEnd();
     }
 
     public bool TryRecycleHoming(bool isClick = false)

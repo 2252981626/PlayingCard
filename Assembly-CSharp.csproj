@@ -99,6 +99,7 @@
     <Compile Include="Assets\scripts\Panel\SettingPanel.cs" />
     <Compile Include="Assets\scripts\Panel\GeneralRewardsPanel3.cs" />
     <Compile Include="Assets\scripts\Panel\TakeReward_WheelRewardPanel.cs" />
+    <Compile Include="Assets\scripts\GameScene\PlayingCardGuide.cs" />
     <Compile Include="Assets\scripts\UIManager\UIManager.cs" />
     <Compile Include="Assets\scripts\GameScene\GameScenePanel.cs" />
     <Compile Include="Assets\scripts\EventSystem\GameEvent.cs" />
@@ -1207,6 +1208,10 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnitySkills.Editor">
+      <HintPath>Library\ScriptAssemblies\UnitySkills.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Editor">
