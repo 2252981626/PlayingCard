@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,12 +11,13 @@ public class GeneralRewardsPanel3 : UIBase
     public Transform itemRoot;
     public RewardAdButton rewardAdButton;
     public Button collectBtn;
-    public Transform collectTrans;
+    public Text collectText;
 
     private List<ItemData> itemDatas;
     private List<ItemBase> itemBase;
 
     private string page_id = "GeneralRewardsPanel";
+    private string unit;
     private void Awake()
     {
         RectTransform rect = root.GetComponent<RectTransform>();
@@ -27,6 +29,7 @@ public class GeneralRewardsPanel3 : UIBase
         collectBtn.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
+            AdManager.Instance.OnClickInterstitialAd("LuckyWheelRewardsPanel");
             CollectClick();
         });
     }
@@ -50,6 +53,11 @@ public class GeneralRewardsPanel3 : UIBase
             }
         }
         OtherSdkManager.Instance.CustomEvent("luckyspin_rewards", "show", "");
+        if (string.IsNullOrEmpty(unit))
+        {
+            unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond__unit");
+        }
+        collectText.text = $"{LanguageManager.Instance.GetText("OnlyClaim")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
         rewardAdButton.Init(AdsCallback, page_id, _isContainGold);
     }
 
@@ -75,7 +83,6 @@ public class GeneralRewardsPanel3 : UIBase
             }
 
             item.GetItemReward();
-            item.GetItemReward();
             item.PlayItemAnim();
         }
         //¶¯»­
@@ -90,8 +97,33 @@ public class GeneralRewardsPanel3 : UIBase
     private void CollectClick()
     {
         OtherSdkManager.Instance.CustomEvent("luckyspin_rewards", "no_thanks", "");
-        AdManager.Instance.OnClickInterstitialAd("LuckyWheelRewardsPanel");
-        Hide();
+
+        PlayerInfoUI playerInfoUI = UIManager.Instance.GetUI<PlayerInfoUI>();
+        UIManager.Instance.OpenUIMask();
+        float awaitTime = 0.1f;
+        foreach (var item in itemBase)
+        {
+            if (item.itemType == ItemType.Gold || item.itemType == ItemType.GoldDui)
+            {
+                awaitTime = 2f;
+                playerInfoUI.GoldCanvasTop();
+            }
+            else if (item.itemType == ItemType.Diamond || item.itemType == ItemType.DiamondDui)
+            {
+                awaitTime = 2f;
+                playerInfoUI.DiamondCanvasTop();
+            }
+            item.count = MathF.Round(item.count / 10f, 2);
+            item.GetItemReward();
+            item.PlayItemAnim();
+        }
+        //¶¯»­
+        DOTween.Sequence().AppendInterval(awaitTime).AppendCallback(() =>
+        {
+            playerInfoUI.GoldCanvasRecover();
+            playerInfoUI.DiamondCanvasRecover();
+            Hide();
+        });
     }
 
     public override void Hide()

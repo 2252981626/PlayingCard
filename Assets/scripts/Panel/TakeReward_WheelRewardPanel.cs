@@ -72,8 +72,7 @@ public class TakeReward_WheelRewardPanel : UIBase
         {
             unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond__unit");
         }
-        //collectText.text = $"{LanguageManager.Instance.GetText("CLAIM")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
-        collectText.text = LanguageManager.Instance.GetText("CLAIM");
+        collectText.text = $"{LanguageManager.Instance.GetText("CLAIM")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
         rewardAdButton.Init(AdsCallback, page_id, _isContainGold);
 
         rewardAdButton.gameObject.SetActive(GameManager.Instance.playerInfo.level > 2);
@@ -102,7 +101,6 @@ public class TakeReward_WheelRewardPanel : UIBase
                 awaitTime = 2f;
                 playerInfoUI.DiamondCanvasTop();
             }
-            item.GetItemReward();
             item.GetItemReward();
             item.PlayItemAnim();
         }
@@ -134,6 +132,7 @@ public class TakeReward_WheelRewardPanel : UIBase
                 awaitTime = 2f;
                 playerInfoUI.DiamondCanvasTop();
             }
+            item.count = MathF.Round(item.count / 10f, 2);
             item.GetItemReward();
             item.PlayItemAnim();
         }

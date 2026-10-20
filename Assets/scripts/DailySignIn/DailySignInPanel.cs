@@ -44,12 +44,12 @@ public class DailySignInPanel : UIBase
 
         List<List<ItemData>> config = new List<List<ItemData>>();
         config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 30) });
-        config.Add(new List<ItemData>() { new ItemData(ItemType.Diamond, 500) });
-        config.Add(new List<ItemData>() { new ItemData(ItemType.Hint, 10) });
-        config.Add(new List<ItemData>() { new ItemData(ItemType.Extract, 10) });
-        config.Add(new List<ItemData>() { new ItemData(ItemType.Exchange, 10) });
-        config.Add(new List<ItemData>() { new ItemData(ItemType.Return, 10) });
-        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 100)});
+        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 30) });
+        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 30) });
+        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 50) });
+        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 50) });
+        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 50) });
+        config.Add(new List<ItemData>() { new ItemData(ItemType.Gold, 70)});
 
         for (int day = 0; day < dailySignInCells.Count; day++)
         {

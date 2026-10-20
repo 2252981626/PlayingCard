@@ -49,15 +49,15 @@ public class TakeReward_WheelPanel : UIBase
 
         configs = new List<ItemData>();
         configs.Add(new ItemData(ItemType.GoldDui, 10f));
-        configs.Add(new ItemData(ItemType.GoldDui, 25f));
-        configs.Add(new ItemData(ItemType.DiamondDui, 150));
-        configs.Add(new ItemData(ItemType.DiamondDui, 300));
-        configs.Add(new ItemData(ItemType.Hint, 1));
-        configs.Add(new ItemData(ItemType.Exchange, 1));
-        configs.Add(new ItemData(ItemType.Extract, 1));
-        configs.Add(new ItemData(ItemType.Return, 1));
+        configs.Add(new ItemData(ItemType.GoldDui, 20f));
+        configs.Add(new ItemData(ItemType.GoldDui, 30f));
+        configs.Add(new ItemData(ItemType.GoldDui, 10f));
+        configs.Add(new ItemData(ItemType.GoldDui, 10f));
+        configs.Add(new ItemData(ItemType.GoldDui, 20f));
+        configs.Add(new ItemData(ItemType.GoldDui, 30f));
+        configs.Add(new ItemData(ItemType.GoldDui, 10f));
 
-        weights = new List<int>() { 5, 1, 3, 2, 5, 5, 5, 5 };
+        weights = new List<int>() { 5, 3, 1, 5, 5, 3, 1, 5 };
 
         cells = GameManager.Instance.CreatItems(configs, transform);
         for (int i = 0; i < cells.Count; i++)
