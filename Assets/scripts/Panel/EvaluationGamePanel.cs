@@ -13,6 +13,21 @@ public class EvaluationGamePanel : UIBase
     public Button btn3;
     public Button btn4;
 
+    public Button star1;
+    public Button star2;
+    public Button star3;
+    public Button star4;
+    public Button star5;
+
+    public GameObject starObj1;
+    public GameObject starObj2;
+    public GameObject starObj3;
+    public GameObject starObj4;
+    public GameObject starObj5;
+
+
+
+    private int star = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,12 +53,41 @@ public class EvaluationGamePanel : UIBase
         btn4.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            PlayerPrefs.SetInt("EvaluationGameStar", 5);
+            PlayerPrefs.SetInt("EvaluationGameStar", star);
             callback = () =>
             {
-                PingJiaTiaoZhuan();
+                if(star > 3)
+                {
+                    PingJiaTiaoZhuan();
+                }
             };
             Hide();
+        });
+
+        star1.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetStar(1);
+        });
+        star2.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetStar(2);
+        });
+        star3.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetStar(3);
+        });
+        star4.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetStar(4);
+        });
+        star5.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlayBtnMusic();
+            SetStar(5);
         });
     }
     public string SecondsToHMS(float totalSeconds)
@@ -54,12 +98,23 @@ public class EvaluationGamePanel : UIBase
         return $"{hours:D2}:{minutes:D2}:{seconds:D2}";
     }
 
+    public void SetStar(int _star)
+    {
+        star = _star;
+        starObj1.gameObject.SetActive(_star >= 1);
+        starObj2.gameObject.SetActive(_star >= 2);
+        starObj3.gameObject.SetActive(_star >= 3);
+        starObj4.gameObject.SetActive(_star >= 4);
+        starObj5.gameObject.SetActive(_star >= 5);
+    }
+
     public override void Refresh(object data = null)
     {
         base.Refresh(data);
         bg1.gameObject.SetActive(true);
         bg2.gameObject.SetActive(false);
 
+        SetStar(0);
         GameScenePanel.isPause = true;
         OtherSdkManager.Instance.CustomEvent("game_rating_show", "time", SecondsToHMS(Time.realtimeSinceStartup));
     }
@@ -69,6 +124,7 @@ public class EvaluationGamePanel : UIBase
         string str = PlayerPrefs.GetString("EvaluationGame", "");
         if (string.IsNullOrEmpty(str))
         {
+            Debug.Log("EvaluationGame - yes");
             AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = 0f;
             AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
             PlayerPrefs.SetString("EvaluationGame", "yes");

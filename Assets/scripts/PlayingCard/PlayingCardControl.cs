@@ -754,19 +754,19 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
     {
         if (GameManager.Instance.gameType == GameType.MainGame)
         {
-            if (curLv % 3 == 0)
+            if (GameManager.Instance.playerInfo.level == 3)
             {
                 GameManager.Instance.EvaluationGameCallback = () =>
                 {
                     string str = PlayerPrefs.GetString("EvaluationGame", "");
                     if (string.IsNullOrEmpty(str))
                     {
-                        PlayerPrefs.SetString("EvaluationGame", "yes");
-                        AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = 0f;
-                        AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
-                        OtherSdkManager.Instance.CustomEvent("game_60s_start", "time", SecondsToHMS(Time.realtimeSinceStartup));
+                        //PlayerPrefs.SetString("EvaluationGame", "yes");
+                        //AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = 0f;
+                        //AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
+                        //OtherSdkManager.Instance.CustomEvent("game_60s_start", "time", SecondsToHMS(Time.realtimeSinceStartup));
+                        GameManager.Instance.TryEvaluationGame();
                     }
-                    //GameManager.Instance.TryEvaluationGame();
                 };
             }
             UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
