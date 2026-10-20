@@ -155,6 +155,7 @@ public class GameSceneItem_Extract : GameSceneItemBase
                             cell.gameSteps.col = i;
                             cell.lastGameSteps = new GameStep(cell.gameSteps);
                         }
+                        curQueue.ShowLastBackPlayingCard();
                     }
 
                     if (target.residuePlayingCards != null)
