@@ -31,6 +31,9 @@ Firebase Messaging 13.2.0 随仓库分发。场景中已有的 `FirebaseAppCheck
 在依赖检查成功后调用 `Assets/scripts/SDK/FirebaseMessagingSetup.cs`，自动创建常驻组件，无需再挂组件。
 Android 启动入口为 `com.google.firebase.MessagingUnityPlayerActivity`，由 SDK 的
 Editor 脚本在构建前生成 Java 源码；原有 SolarEngine 和 Adjust 配置保留。
+Mobile Notifications 的 Use Custom Activity 已开启，并明确设置为
+`com.google.firebase.MessagingUnityPlayerActivity`；主 Manifest 同时显式声明
+`custom_notification_android_activity`，避免广告 SDK 的其他 Activity 使自动选择失败。
 
 - 开局通知权限沿用 `RetentionSetup` 的请求。
 - 订阅主题 `daily_reminders`；仅在异步订阅成功后输出成功日志。
