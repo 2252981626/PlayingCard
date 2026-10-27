@@ -18,6 +18,14 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.tiger.retention": {
+      "version": "file:com.tiger.retention",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.mobile.notifications": "2.4.0"
+      }
+    },
     "com.unity.2d.animation": {
       "version": "9.2.0",
       "depth": 1,
@@ -186,6 +194,15 @@
       "depth": 2,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
+    "com.unity.mobile.notifications": {
+      "version": "2.4.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.androidjni": "1.0.0"
+      },
       "url": "https://packages.unity.cn"
     },
     "com.unity.nuget.newtonsoft-json": {

@@ -4,6 +4,27 @@ Unity 2022.3.62f3 项目。CI 通过 GitHub Actions 自动打包 Android APK / A
 
 ---
 
+## 玩家召回通知（Android）
+
+通知包内置于 `Packages/com.tiger.retention`，依赖 Unity Mobile Notifications 2.4.0，
+随仓库一起分发，无需引用下载目录或另行导入 `.unitypackage`。
+
+- 项目配置：`Assets/scripts/SDK/RetentionSetup.cs`。启动及从后台返回时，按存档中的
+  当前关卡重排 20 / 72 / 168 小时后的本地通知；主线通关后更新关卡文案。
+- 文案跟随游戏支持的系统语言：英语、葡萄牙语、印尼语。23:00–09:00 的通知顺延至 10:00。
+- 进入游戏时立即请求通知权限，每次运行只请求一次；已授权时不会重复弹窗。
+- 点击回流通过现有 SolarEngine 入口上报 `retention_notification_open`，参数为
+  `notification_key`（`d1` / `d3` / `d7`）及 `level_id`；SDK 尚未就绪时暂存，普通后台返回不会重复上报。
+- 图标 `Assets/Plugins/Android/notify_small.png` 的注册和设备重启恢复设置由包内 Editor 工具维护。
+  项目保持非精确调度，实际通知时间可能受系统调度影响。
+
+编辑器仅输出 `[Retention]` 预览日志。自动测试位于 `Assets/Tests/Editor/RetentionNotificationTests.cs`，
+通过 Test Runner 的 EditMode 运行；覆盖夜间边界、回流去重和无存档进度的多语言文案。
+实际发送和点击回流需在安卓真机上验证；快速测试可临时缩短 `RetentionSetup.cs` 中的通知间隔，
+同时关闭 `AvoidNightHours`，测试后恢复正式值。
+
+---
+
 ## Firebase 依赖管理说明
 
 > 这一节很重要 —— 换机器、重新克隆仓库后请先读这里。

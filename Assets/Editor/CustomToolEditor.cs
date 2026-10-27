@@ -1,4 +1,5 @@
 ﻿
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,5 +21,20 @@ public class CustomToolEditor
     public static void PlayerPrefsDeleteAll()
     {
         PlayerPrefs.DeleteAll();
+    }
+
+    [MenuItem("Tools/Screenshot/Take Screenshot %#y")] // 快捷键 Ctrl+Shift+Y
+    private static void CaptureRuntimeScreenshot()
+    {
+        string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Screenshots");
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+        var timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+        string savePath = Path.Combine(folderPath, $"Screenshot_{timestamp}.png");
+
+        ScreenCapture.CaptureScreenshot(savePath); // 截取当前 Game 视图内容
+        Debug.Log($"截图已保存至：{savePath}"); // 输出日志
     }
 }

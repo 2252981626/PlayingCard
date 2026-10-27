@@ -711,6 +711,7 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
         if (GameManager.Instance.gameType == GameType.MainGame)
         {
             GameManager.Instance.playerInfo.level++;
+            RetentionSetup.OnLevelCompleted(GameManager.Instance.playerInfo.level);
             //Ïä×Ó
             GameBox.Instance.CheckBoxProgress(curLv ,() =>
             {
