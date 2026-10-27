@@ -753,23 +753,18 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
 
     private void NextLevel(int curLv)
     {
+        Action openEvaluationGame = () =>
+        {
+            string str = PlayerPrefs.GetString("EvaluationGame", "");
+            if (string.IsNullOrEmpty(str) && GameManager.Instance.IsAfterFirstGameDay())
+            {
+                UIManager.Instance.OpenUI<EvaluationGamePanel>();
+            }
+        };
+
         if (GameManager.Instance.gameType == GameType.MainGame)
         {
-            if (GameManager.Instance.playerInfo.level == 3)
-            {
-                GameManager.Instance.EvaluationGameCallback = () =>
-                {
-                    string str = PlayerPrefs.GetString("EvaluationGame", "");
-                    if (string.IsNullOrEmpty(str))
-                    {
-                        //PlayerPrefs.SetString("EvaluationGame", "yes");
-                        //AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = 0f;
-                        //AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
-                        //OtherSdkManager.Instance.CustomEvent("game_60s_start", "time", SecondsToHMS(Time.realtimeSinceStartup));
-                        GameManager.Instance.TryEvaluationGame();
-                    }
-                };
-            }
+            GameManager.Instance.EvaluationGameCallback = openEvaluationGame;
             UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
         }
         else if (GameManager.Instance.gameType == GameType.DailyGame)
@@ -779,8 +774,8 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
             UIManager.Instance.GetUI<GameScenePanel>().Hide();
             UIManager.Instance.OpenUI<LobbyScenePanel>(2);
             AudioManager.Instance.PlayBGM("BGM1");
+            openEvaluationGame();
         }
-
 
         GameManager.Instance.SavePlayerInfo();
     }
