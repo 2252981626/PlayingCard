@@ -28,7 +28,7 @@ Unity 2022.3.62f3 项目。CI 通过 GitHub Actions 自动打包 Android APK / A
 ## Firebase 后台推送（Android）
 
 Firebase Messaging 13.2.0 随仓库分发。场景中已有的 `FirebaseAppCheckManager`
-在依赖检查成功后调用 `Assets/scripts/SDK/FirebaseMessagingSetup.cs`，无需再挂组件。
+在依赖检查成功后调用 `Assets/scripts/SDK/FirebaseMessagingSetup.cs`，自动创建常驻组件，无需再挂组件。
 Android 启动入口为 `com.google.firebase.MessagingUnityPlayerActivity`，由 SDK 的
 Editor 脚本在构建前生成 Java 源码；原有 SolarEngine 和 Adjust 配置保留。
 
@@ -36,8 +36,11 @@ Editor 脚本在构建前生成 Java 源码；原有 SolarEngine 和 Adjust 配�
 - 订阅主题 `daily_reminders`；仅在异步订阅成功后输出成功日志。
 - 初始 Token 和后续刷新 Token 均保存到 `PlayerPrefs` 的 `FCMDeviceToken`。
   真机日志输出 `[FCM] Device token: ...`，可用于 Firebase 控制台的发送测试消息。
-- 前台接收时显示服务端发送的标题和正文，也支持 data 中的 `title` / `body`。
+- 使用项目提供的 `InitializeFcm` → `OnMessageReceived` → `ShowNotificationPopup` 流程，
+  通过 Android 原生 `NotificationCompat.Builder` 显示 notification 中的标题和正文。
   后台标准 notification 消息由 Android/FCM 自动显示；点击通知不会再生成一份。
+- 保留提供的八条文案和 `GetRandomUnshownText` 轮换逻辑，索引保存到 `ShownNotificationIndexes`，
+  下次启动恢复；与原代码一致，实际显示正文采用服务端 `Notification.Body`。
 - 默认远程推送渠道为 `solitaire_casino_tycoon_push`，图标为 `notify_small`。
   本地召回通知继续使用 `solitaire_casino_tycoon_recall`。
 

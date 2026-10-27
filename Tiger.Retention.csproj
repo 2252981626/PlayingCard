@@ -523,6 +523,14 @@
       <HintPath>Assets\Firebase\Editor\Firebase.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Messaging">
+      <HintPath>Assets\Firebase\Plugins\Firebase.Messaging.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.Messaging.Editor">
+      <HintPath>Assets\Firebase\Editor\Firebase.Messaging.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3c1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
       <Private>False</Private>
