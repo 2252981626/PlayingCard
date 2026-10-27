@@ -25,13 +25,37 @@ Unity 2022.3.62f3 项目。CI 通过 GitHub Actions 自动打包 Android APK / A
 
 ---
 
+## Firebase 后台推送（Android）
+
+Firebase Messaging 13.2.0 随仓库分发。场景中已有的 `FirebaseAppCheckManager`
+在依赖检查成功后调用 `Assets/scripts/SDK/FirebaseMessagingSetup.cs`，无需再挂组件。
+Android 启动入口为 `com.google.firebase.MessagingUnityPlayerActivity`，由 SDK 的
+Editor 脚本在构建前生成 Java 源码；原有 SolarEngine 和 Adjust 配置保留。
+
+- 开局通知权限沿用 `RetentionSetup` 的请求。
+- 订阅主题 `daily_reminders`；仅在异步订阅成功后输出成功日志。
+- 初始 Token 和后续刷新 Token 均保存到 `PlayerPrefs` 的 `FCMDeviceToken`。
+  真机日志输出 `[FCM] Device token: ...`，可用于 Firebase 控制台的发送测试消息。
+- 前台接收时显示服务端发送的标题和正文，也支持 data 中的 `title` / `body`。
+  后台标准 notification 消息由 Android/FCM 自动显示；点击通知不会再生成一份。
+- 默认远程推送渠道为 `solitaire_casino_tycoon_push`，图标为 `notify_small`。
+  本地召回通知继续使用 `solitaire_casino_tycoon_recall`。
+
+测试时重新打包安装，启动并允许通知权限，从 `adb logcat -s Unity` 复制最新 Token，
+在 Firebase 项目 `solitaire-casino-tycoon` 的 Messaging 中发送测试消息。
+先把游戏按 Home 切到后台测试通知栏，再回到前台测试接收日志和前台通知。
+使用带 Google Play 服务且能连接 FCM 的 Android 设备，避免使用系统强行停止应用来测试。
+主题推送的目标填写 `daily_reminders`；后台 data-only 消息不保证直接显示通知。
+
+---
+
 ## Firebase 依赖管理说明
 
 > 这一节很重要 —— 换机器、重新克隆仓库后请先读这里。
 
 ### 现状
 
-Firebase Unity SDK **13.2.0**（`firebase_app` + `firebase_analytics`）是通过官方
+Firebase Unity SDK **13.2.0**（`firebase_app` + `firebase_analytics` + `firebase_messaging`）是通过官方
 `.unitypackage` 导入到 `Assets/` 下的，依赖解析由 **External Dependency Manager (EDM4U)**
 负责。
 
@@ -64,7 +88,7 @@ Android 打包**无需任何额外操作** —— 克隆下来直接就能在 CI
    （<https://firebase.google.cn/download/unity>，或从
    <https://developers.google.cn/unity/archive> 取单个 `.unitypackage`）
 2. Unity 中 `Assets > Import Package > Custom Package`，导入
-   `FirebaseAnalytics.unitypackage` + `FirebaseApp.unitypackage`
+   `FirebaseAnalytics.unitypackage` + `FirebaseMessaging.unitypackage`（均包含 App 依赖）
 3. 被忽略的文件会自动重新释放到上述路径
 
 > ⚠️ 重新导入后**不要** `git add -f` 那些大文件。`.gitignore` 已经拦好了，
@@ -125,7 +149,7 @@ Unity 菜单：Assets > External Dependency Manager > Android Resolver > Force R
 
 两个 workflow 在构建前都会跑一步 **Firebase 依赖完整性校验**，做两件事：
 
-1. 检查 13 个关键文件（托管 DLL、依赖描述 XML、m2repository 里的 srcaar、EDM4U、
+1. 检查关键文件（托管 DLL、依赖描述 XML、m2repository 里的 srcaar、EDM4U、Messaging Activity 生成器、
    `mainTemplate.gradle`、`google-services.json`）是否存在
 2. 检查 `mainTemplate.gradle` 里是否已经写入了 `com.google.firebase:firebase-analytics`
    等 Android 依赖 —— **这一条专门用来拦截「忘记跑 Force Resolve」**

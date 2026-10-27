@@ -7,6 +7,12 @@ public class FirebaseAppCheckManager : MonoBehaviour
     private void Start()
     {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+            if (task.IsCanceled || task.IsFaulted)
+            {
+                FirebaseAdAnalytics.IsReady = false;
+                Debug.LogError("[Firebase] Dependency check failed: " + task.Exception);
+                return;
+            }
             var dependencyStatus = task.Result;
             // 无论成功失败都打出来，方便真机 logcat 验证 Firebase 是否真的起来了
             Debug.Log("[Firebase] DependencyStatus = " + dependencyStatus);
@@ -17,6 +23,7 @@ public class FirebaseAppCheckManager : MonoBehaviour
                 // app = Firebase.FirebaseApp.DefaultInstance;
                 // Set a flag here to indicate whether Firebase is ready to use by your app.
                 FirebaseAdAnalytics.IsReady = true;
+                FirebaseMessagingSetup.Initialize();
             }
             else
             {

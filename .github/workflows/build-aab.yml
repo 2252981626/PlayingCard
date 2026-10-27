@@ -39,6 +39,12 @@ jobs:
           }
           echo "== 校验 Firebase Android 依赖 =="
           check "Assets/Firebase/Plugins/Firebase.Analytics.dll"
+          check "Assets/Firebase/Plugins/Firebase.Messaging.dll"
+          check "Assets/Firebase/Plugins/Android/firebase-messaging-cpp.aar"
+          check "Assets/Firebase/Editor/MessagingDependencies.xml"
+          check "Assets/Firebase/Editor/Messaging/FirebaseMessagingActivityGenerator.cs"
+          check "Assets/Firebase/Editor/Messaging/FirebaseMessagingActivityGenerator.asmdef"
+          check "Assets/Firebase/m2repository/com/google/firebase/firebase-messaging-unity/13.2.0/firebase-messaging-unity-13.2.0.srcaar"
           check "Assets/Firebase/Plugins/Firebase.App.dll"
           check "Assets/Firebase/Plugins/Firebase.Platform.dll"
           check "Assets/Firebase/Plugins/Firebase.TaskExtension.dll"
@@ -57,7 +63,7 @@ jobs:
           # AutoResolverEnabled=False），解析结果靠提交固化，不会在构建时自动刷新。
           # 一旦这里失败，说明忘记跑 Force Resolve 或忘了提交解析结果。
           echo "== 校验 mainTemplate.gradle 中的 Firebase 依赖 =="
-          for spec in "com.google.firebase:firebase-analytics" "firebase-analytics-unity" "firebase-app-unity"; do
+          for spec in "com.google.firebase:firebase-analytics" "firebase-analytics-unity" "firebase-app-unity" "com.google.firebase:firebase-messaging:" "firebase-messaging-unity"; do
             if grep -q "$spec" Assets/Plugins/Android/mainTemplate.gradle; then
               echo "  [OK]   mainTemplate.gradle 含 $spec"
             else
