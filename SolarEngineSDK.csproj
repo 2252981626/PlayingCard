@@ -426,6 +426,10 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3c1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Messaging">
+      <HintPath>Assets\Firebase\Plugins\Firebase.Messaging.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="TextMateSharpPlastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.12.4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.dll</HintPath>
       <Private>False</Private>
@@ -464,6 +468,10 @@
     </Reference>
     <Reference Include="SolarEngineUnityTool">
       <HintPath>Assets\Plugins\SolarEngine\MiniGame\SolarEngineUnityTool.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Firebase.Messaging.Editor">
+      <HintPath>Assets\Firebase\Editor\Firebase.Messaging.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="OnigwrapPlastic">
@@ -544,14 +552,6 @@
     </Reference>
     <Reference Include="Firebase.Editor">
       <HintPath>Assets\Firebase\Editor\Firebase.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Firebase.Messaging">
-      <HintPath>Assets\Firebase\Plugins\Firebase.Messaging.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Firebase.Messaging.Editor">
-      <HintPath>Assets\Firebase\Editor\Firebase.Messaging.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">

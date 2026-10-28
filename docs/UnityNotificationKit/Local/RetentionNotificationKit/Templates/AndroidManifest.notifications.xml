@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Local-only mode: merge this permission into the receiving project's Manifest. -->
+<!-- Keep the game's existing launcher Activity. Firebase is not required. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+</manifest>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Merge these entries into the receiving project's Manifest. Preserve existing SDK entries. -->
+<!-- Replace your_game_push with NotificationProjectConfig.RemoteChannelId. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <application>
+    <meta-data android:name="custom_notification_android_activity"
+               android:value="com.google.firebase.MessagingUnityPlayerActivity" />
+    <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
+               android:value="your_game_push" />
+    <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+               android:resource="@drawable/notify_small" />
+    <activity android:name="com.google.firebase.MessagingUnityPlayerActivity"
+              android:exported="true"
+              android:theme="@style/UnityThemeSelector">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+    </activity>
+  </application>
+</manifest>

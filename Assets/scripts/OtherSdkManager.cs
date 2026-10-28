@@ -142,7 +142,7 @@ public class OtherSdkManager : MonoBehaviour
         #region 远程参数默认兜底配置
         // att_code：归因标识字符串，用于区分渠道/归因类型，后台下发不同渠道标识，空字符串为默认
         SESDKRemoteConfig.Item item_att_code = remoteConfig.stringItem("att_code", "F");
-        // mau_inter：手动插屏强制展示开关；true=忽略插屏冷却间隔，100%展示手动插屏；false=遵循冷却限制
+        // mau_inter=true skips the shared cooldown; false enforces it for all requests.
         SESDKRemoteConfig.Item item_mau_inter = remoteConfig.boolItem("mau_inter", false);
         // inter_show_space：全局插屏公共冷却时长(秒)；所有插屏（手动/自动）共用的冷却间隔
         SESDKRemoteConfig.Item item_inter_show_space = remoteConfig.intItem("inter_show_space", 45);
@@ -204,18 +204,18 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 inter_enable = " + result);
                 if (bool.TryParse(result, out bool interEnable))
                 {
-                    ApplovinMaxInterstitialOperator.inter_enable = interEnable;
+                    AdManager.inter_enable = interEnable;
                 }
             }
 
-            // mau_inter - 手动插屏是否强制展示；true忽略冷却间隔，100%展示手动插屏
+            // mau_inter=true skips the shared cooldown; false enforces it for all requests.
             if (allConfig.TryGetValue("mau_inter", out var mauInterObj))
             {
                 string result = mauInterObj.ToString();
                 Debug.Log("远程参数 mau_inter = " + result);
                 if (bool.TryParse(result, out bool mauInter))
                 {
-                    ApplovinMaxInterstitialOperator.mau_inter = mauInter;
+                    AdManager.mau_inter = mauInter;
                 }
             }
 
@@ -226,7 +226,7 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 inter_show_space = " + result);
                 if (int.TryParse(result, out int interSpace))
                 {
-                    ApplovinMaxInterstitialOperator.ad_mau_inter_time = interSpace;
+                    AdManager.ad_mau_inter_time = interSpace;
                 }
             }
 
@@ -237,7 +237,7 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 auto_inter_space = " + result);
                 if (int.TryParse(result, out int autoInterSpace))
                 {
-                    ApplovinMaxInterstitialOperator.insertTime = autoInterSpace;
+                    AdManager.insertTime = autoInterSpace;
                 }
             }
 
@@ -248,10 +248,10 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 start_inter_sec = " + result);
                 if (int.TryParse(result, out int startInterSec))
                 {
-                    ApplovinMaxInterstitialOperator.startInsertTime = startInterSec;
+                    AdManager.startInsertTime = startInterSec;
                     if (AdManager.Instance != null)
                     {
-                        AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = startInterSec;
+                        AdManager.Instance.ResetInterstitialTimer(startInterSec);
                     }
                 }
             }

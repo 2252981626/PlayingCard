@@ -1,0 +1,19 @@
+{
+  "name": "com.tiger.retention",
+  "version": "1.0.0",
+  "displayName": "Retention Notification",
+  "description": "次留召回本地通知：游戏启动时清空并重排 D1/D3/D7 召回链，玩家未回归时依次提醒。不依赖服务器与 GMS，国内设备同样生效。Android 13+ 权限自动处理，通知回流可挂钩埋点。",
+  "unity": "2021.3",
+  "dependencies": {
+    "com.unity.mobile.notifications": "2.4.0"
+  },
+  "keywords": [
+    "notification",
+    "retention",
+    "local",
+    "android"
+  ],
+  "author": {
+    "name": "Tiger"
+  }
+}

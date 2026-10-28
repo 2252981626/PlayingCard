@@ -2,6 +2,8 @@
 
 Unity 2022.3.62f3 项目。CI 通过 GitHub Actions 自动打包 Android APK / AAB。
 
+通知独立接入包：[本地通知源码、远程通知代码与 SDK 接入说明](docs/android-notifications-integration.md)。
+
 ---
 
 ## 玩家召回通知（Android）
@@ -143,7 +145,7 @@ Unity 菜单：Assets > External Dependency Manager > Android Resolver > Force R
 
 1. Unity Hub 安装 **2022.3.62f3**
 2. 打开本仓库根目录
-3. 首次打开会自动解析包并运行 EDM4U 的 Android 依赖解析（需要联网）
+3. 首次打开等待 Unity 包导入完成；新增或修改 SDK 依赖后，手动运行 EDM4U 的 `Force Resolve`（需要联网）
 4. `File > Build Settings > Android` 出包
 
 签名文件 `Assets/mySignKey.keystore` 随仓库一起提交（密码走 GitHub Secrets）。

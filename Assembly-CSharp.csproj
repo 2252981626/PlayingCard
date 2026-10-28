@@ -82,7 +82,6 @@
     <Compile Include="Assets\scripts\AB\ABResManager.cs" />
     <Compile Include="Assets\scripts\Manager\GameStepRecord.cs" />
     <Compile Include="Assets\scripts\Panel\GameWinPanel.cs" />
-    <Compile Include="Assets\scripts\Ad\ApplovinMaxInterstitialOperator.cs" />
     <Compile Include="Assets\scripts\AB\ABbuildManager.cs" />
     <Compile Include="Assets\scripts\Ad\PixalateSystem.cs" />
     <Compile Include="Assets\scripts\TxElement\TxElementBtn.cs" />
@@ -90,7 +89,6 @@
     <Compile Include="Assets\scripts\Guide\GuidePanel_TxBtn.cs" />
     <Compile Include="Assets\scripts\Manager\AudioManager.cs" />
     <Compile Include="Assets\scripts\OtherSdkManager.cs" />
-    <Compile Include="Assets\scripts\Ad\ApplovinMaxRewardOperator.cs" />
     <Compile Include="Assets\scripts\UIManager\UIBase.cs" />
     <Compile Include="Assets\scripts\GameScene\sceneitem\GameSceneItem_Hint.cs" />
     <Compile Include="Assets\scripts\language\IndonesianLanguageConfig.cs" />
@@ -500,6 +498,10 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.62f3c1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Firebase.Messaging">
+      <HintPath>Assets\Firebase\Plugins\Firebase.Messaging.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Firebase.Analytics">
       <HintPath>Assets\Firebase\Plugins\Firebase.Analytics.dll</HintPath>
       <Private>False</Private>
@@ -550,10 +552,6 @@
     </Reference>
     <Reference Include="solarenginewindows">
       <HintPath>Assets\Plugins\SolarEngine\Windows\solarenginewindows.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Firebase.Messaging">
-      <HintPath>Assets\Firebase\Plugins\Firebase.Messaging.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
@@ -1240,16 +1238,16 @@
       <HintPath>Library\ScriptAssemblies\Unity.Notifications.Android.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.2D.SpriteShape.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.Animation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.2D.SpriteShape.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.IK.Editor">
