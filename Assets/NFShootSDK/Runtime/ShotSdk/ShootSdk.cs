@@ -67,6 +67,7 @@ public class ShootSdk : MonoBehaviour
     [DoNotRenameAttribute]
 #endif
     private Action onPlayReward;
+    private Action onPlayRewardError;
 
     private SootSdkInit mInitData = new SootSdkInit();
 
@@ -117,9 +118,15 @@ public class ShootSdk : MonoBehaviour
 #if NFSDK_OPS_OBFUSCATOR
     [DoNotObfuscateMethodBodyAttribute]
 #endif
-    public void PlayRewardAds(Action callBack, string sceneid = "0")
+    public void PlayRewardAds(Action callBack, string sceneid = "0", Action displayErrorCallback = null)
     {
         onPlayReward = callBack;
+        onPlayRewardError = displayErrorCallback;
+        if (Platform.Instance == null)
+        {
+            OnRewardedAdFailed();
+            return;
+        }
         Platform.Instance.OnShowAd(AdType.Reward.ToString());
     }
 
@@ -129,8 +136,43 @@ public class ShootSdk : MonoBehaviour
 #endif
     public void OnAwardCallback()
     {
-        onPlayReward?.Invoke();
+        Action callback = onPlayReward;
         onPlayReward = null;
+        onPlayRewardError = null;
+        callback?.Invoke();
+    }
+
+    public void OnRewardedAdFailed()
+    {
+        Action callback = onPlayRewardError;
+        onPlayReward = null;
+        onPlayRewardError = null;
+        callback?.Invoke();
+    }
+
+    public void OnRewardedAdClosed()
+    {
+        // A real reward callback may arrive after close; keep its original callback.
+        Action callback = onPlayRewardError;
+        onPlayRewardError = null;
+        callback?.Invoke();
+    }
+
+    public void OnAdDisplayed(AdParam param)
+    {
+        if (param == null || OtherSdkManager.Instance == null) return;
+        OtherSdkManager.Instance.SendPixalateRequest(param.UIntIdStr);
+    }
+
+    public void OnAdClicked(AdParam param)
+    {
+        if (param == null || !OtherSdkManager.IsInit) return;
+        var attributes = new SolarEngine.AdClickAttributes();
+        attributes.ad_platform = param.sourceName;
+        attributes.mediation_platform = "max";
+        attributes.ad_id = param.UIntIdStr;
+        attributes.ad_type = param.AdType == AdType.Reward ? 1 : 3;
+        SolarEngine.Analytics.trackAdClick(attributes);
     }
 
 #if NFSDK_OPS_OBFUSCATOR
@@ -208,18 +250,8 @@ public class ShootSdk : MonoBehaviour
                 Debug.LogWarning("[ShootSdk] Rewarded impression reporting failed: " + error.Message);
             }
         }
-
-        AddAwardAddSave();
     }
 
-#if NFSDK_OPS_OBFUSCATOR
-    [DoNotObfuscateMethodBodyAttribute]
-#endif
-    public void AddAwardAddSave()
-    {
-        rewardAdWatchCount = rewardAdWatchCount + 1;
-        PlayerPrefs.SetInt(RewardAdCountKey, rewardAdWatchCount);
-    }
 
 
 

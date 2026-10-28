@@ -39,18 +39,6 @@ public class AdManager : MonoBehaviour
         ResetInterstitialTimer(startInsertTime);
         insertClickCoolingTime = 0f;
         isInit = true;
-        //Debug.Log("Max SDK初始化");
-
-        //MaxSdkCallbacks.OnSdkInitializedEvent += (MaxSdk.SdkConfiguration sdkConfiguration) =>
-        //{
-        //    applovinMaxRewardOperator.Init();
-        //    applovinMaxInterstitialOperator.Init();
-        //};
-
-        //string decryptedSdkKey = EncryptSDKKey.DecryptWithRandomSalt(SDK_key);
-        ////Debug.Log("解密结果（还原原值）：" + decryptedSdkKey);
-        //MaxSdk.SetSdkKey(decryptedSdkKey);
-        //MaxSdk.InitializeSdk();
     }
 
     private void Update()
@@ -96,15 +84,17 @@ public class AdManager : MonoBehaviour
         }
 
 #if UNITY_ANDROID && !UNITY_EDITOR
-        ShootSdk.Instance.PlayRewardAds(_rewardCallback);
+        ShootSdk.Instance.PlayRewardAds(() =>
+        {
+            insertClickCoolingTime = Mathf.Max(0f, ad_mau_inter_time);
+            ResetInterstitialTimer(insertTime);
+            _rewardCallback?.Invoke();
+        }, _page_id, _displayErrorCallback);
 #else
         Debug.Log("[AdManager] Rewarded ads are available in Android players only.");
         _displayErrorCallback?.Invoke();
 #endif
 
-        //applovinMaxRewardOperator.RewardReceivedCallback = _rewardCallback;
-        //applovinMaxRewardOperator.RewardDisplayErrorCallback = _displayErrorCallback;
-        //applovinMaxRewardOperator.ShowRewardedAd();
     }
 
     /// <summary>
