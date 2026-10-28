@@ -20,6 +20,7 @@ public class AdManager : MonoBehaviour
 
     private bool isInit;
 
+
     //public ApplovinMaxRewardOperator applovinMaxRewardOperator;
     //public ApplovinMaxInterstitialOperator applovinMaxInterstitialOperator;
     //private string SDK_key = "PbbJng_h8aD16wZWrSaHN5gtVDExorX-b1ywfx8Gal1WlU7kvbWVDpzsPARTTLwex_cbeU8SGZanUXSoA1WDMx";//≤‚ ‘
@@ -119,9 +120,6 @@ public class AdManager : MonoBehaviour
         Debug.Log($"[AdManager] Interstitial request: page_id={_page_id}, isClick={isClick}");
 
         // TODO: Call the interstitial SDK here.
-        // Call SetInterstitialAdPlaying(true) immediately before the SDK request,
-        // then SetInterstitialAdPlaying(false) in BOTH close and failure callbacks.
-        // Wire rewarded SDK requests/close/failure to SetRewardedAdPlaying as well.
     }
 
 }

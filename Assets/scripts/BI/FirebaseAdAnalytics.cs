@@ -8,9 +8,9 @@ using UnityEngine;
 /// 统一使用 GA4 推荐事件 <c>ad_impression</c>，参数与 GA4「广告收入」报表对齐：
 /// <list type="bullet">
 ///   <item><description>ad_platform  —— 聚合平台（本项固定为 AppLovin）</description></item>
-///   <item><description>ad_source    —— 实际变现的广告网络（MAX 的 NetworkName）</description></item>
+///   <item><description>ad_source    —— 实际变现的广告网络</description></item>
 ///   <item><description>ad_format    —— rewarded / interstitial</description></item>
-///   <item><description>ad_unit_name —— MAX 广告位 ID</description></item>
+///   <item><description>ad_unit_name —— 广告位 ID</description></item>
 ///   <item><description>currency     —— USD（GA4 规定：传 value 必须同时传 currency）</description></item>
 ///   <item><description>value        —— 本次展示的广告收入，即「广告价值」</description></item>
 /// </list>
@@ -53,15 +53,12 @@ public static class FirebaseAdAnalytics
     /// <summary>
     /// 上报一次广告展示（广告价值）。
     /// </summary>
-    /// <param name="adInfo">AppLovin MAX 回调带回的广告信息</param>
+    /// <param name="networkName">广告网络名称</param>
+    /// <param name="adUnitIdentifier">广告位 ID</param>
+    /// <param name="adRevenue">本次展示的广告收入（USD）</param>
     /// <param name="adFormat">ad_format 取值，见 <see cref="AdFormatRewarded"/> / <see cref="AdFormatInterstitial"/></param>
-    public static void LogAdImpression(MaxSdk.AdInfo adInfo, string adFormat)
+    public static void LogAdImpression(string networkName, string adUnitIdentifier, double adRevenue, string adFormat)
     {
-        if (adInfo == null)
-        {
-            return;
-        }
-
         if (!IsReady)
         {
             // 只提示一次，避免广告频繁触发时刷屏
@@ -75,10 +72,10 @@ public static class FirebaseAdAnalytics
 
         try
         {
-            string source = string.IsNullOrEmpty(adInfo.NetworkName) ? "unknown" : adInfo.NetworkName;
-            string unit = string.IsNullOrEmpty(adInfo.AdUnitIdentifier) ? "unknown" : adInfo.AdUnitIdentifier;
-            // MAX 取不到收入时会给 -1，GA4 的 value 不接受负数，这里归零但依然记一次展示
-            double revenue = adInfo.Revenue > 0d ? adInfo.Revenue : 0d;
+            string source = string.IsNullOrEmpty(networkName) ? "unknown" : networkName;
+            string unit = string.IsNullOrEmpty(adUnitIdentifier) ? "unknown" : adUnitIdentifier;
+            // 收入不可用或为负数时归零，但依然记录一次展示。
+            double revenue = adRevenue > 0d ? adRevenue : 0d;
 
             FirebaseAnalytics.LogEvent(
                 EventAdImpression,

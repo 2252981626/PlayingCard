@@ -1192,8 +1192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 710313833}
   - component: {fileID: 710313834}
-  - component: {fileID: 710313836}
-  - component: {fileID: 710313835}
   m_Layer: 0
   m_Name: AdManager
   m_TagString: Untagged
@@ -1226,33 +1224,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b660048e2d648da408ae289e5cc2a402, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  applovinMaxRewardOperator: {fileID: 710313836}
-  applovinMaxInterstitialOperator: {fileID: 710313835}
---- !u!114 &710313835
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 710313832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a0ddf0dd7f737c48ab4ca2dc70146fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  insertTimer: 0
---- !u!114 &710313836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 710313832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df117b7b683d7534a9c087b681725f31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &766648278

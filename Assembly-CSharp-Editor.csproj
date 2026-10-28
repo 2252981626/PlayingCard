@@ -65,34 +65,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\SolarEngineNet\iOS\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\Mintegral\Editor\Dependencies.xml" />
     <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.IOSResolver.dll" />
-    <None Include="Assets\MaxSdk\Mediation\Chartboost\Editor\Dependencies.xml" />
     <None Include="Assets\Firebase\Editor\FirebaseMessaging_version-13.2.0_manifest.txt" />
-    <None Include="Assets\MaxSdk\AppLovin\Editor\Dependencies.xml" />
     <None Include="Assets\Adjust\Native\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\Google\Editor\Dependencies.xml" />
     <None Include="Assets\Firebase\Editor\Firebase.Messaging.Editor.dll" />
     <None Include="Assets\ExternalDependencyManager\Editor\Google.VersionHandler.dll" />
-    <None Include="Assets\MaxSdk\Mediation\ByteDance\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\BidMachine\Editor\Dependencies.xml" />
     <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.PackageManagerResolver.dll" />
-    <None Include="Assets\MaxSdk\Mediation\IronSource\Editor\Dependencies.xml" />
     <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.VersionHandlerImpl.dll" />
-    <None Include="Assets\MaxSdk\Mediation\UnityAds\Editor\Dependencies.xml" />
     <None Include="Assets\Firebase\Editor\MessagingDependencies.xml" />
     <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.186_manifest.txt" />
     <None Include="Assets\Firebase\Editor\FirebaseAnalytics_version-13.2.0_manifest.txt" />
     <None Include="Assets\SolarEngineNet\Android\Editor\Dependencies.xml" />
     <None Include="Assets\ExternalDependencyManager\Editor\1.2.186\Google.JarResolver.dll" />
     <None Include="Assets\Firebase\Editor\AppDependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\BigoAds\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\InMobi\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\Vungle\Editor\Dependencies.xml" />
     <None Include="Assets\Firebase\Editor\AnalyticsDependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\Fyber\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\Facebook\Editor\Dependencies.xml" />
-    <None Include="Assets\MaxSdk\Mediation\Moloco\Editor\Dependencies.xml" />
     <None Include="Assets\Firebase\Editor\Firebase.Editor.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -1322,10 +1308,6 @@
       <Project>{B951B5F7-99E4-44B1-DDE4-8F94AE6976D8}</Project>
       <Name>SolarEngineSDK.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="MaxSdk.Scripts.csproj">
-      <Project>{F3C82DA6-ED9D-7A13-F26C-E031E6874359}</Project>
-      <Name>MaxSdk.Scripts</Name>
-    </ProjectReference>
     <ProjectReference Include="AdjustSdk.Scripts.csproj">
       <Project>{6FB1BECC-0EB8-50A8-5669-7940F5D87389}</Project>
       <Name>AdjustSdk.Scripts</Name>
@@ -1333,10 +1315,6 @@
     <ProjectReference Include="FirebaseMessagingActivityGenerator.csproj">
       <Project>{1951F2D3-34BA-2617-1C71-988AFA76D0D1}</Project>
       <Name>FirebaseMessagingActivityGenerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="MaxSdk.Scripts.IntegrationManager.Editor.csproj">
-      <Project>{C1553732-7D59-6A35-1085-DCBDA29C8F3E}</Project>
-      <Name>MaxSdk.Scripts.IntegrationManager.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="SolarEngineSDK.csproj">
       <Project>{51AE726C-4CD3-0DE9-820C-5B1E1F73532B}</Project>
