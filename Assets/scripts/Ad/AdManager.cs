@@ -118,7 +118,8 @@ public class AdManager : MonoBehaviour
 
         // Both request types obey cooldown unless mau_inter is enabled.
         if (!mau_inter && insertClickCoolingTime > 0f) return;
-        if (string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", ""))) return;
+        //if (string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", ""))) return;
+        if (GameManager.Instance.playerInfo.level <= 3) return;
 
         if (ShootSdk.Instance == null || Platform.Instance == null)
         {
