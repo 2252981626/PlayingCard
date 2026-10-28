@@ -78,6 +78,10 @@ Secrets 名称沿用原流程：`UNITY_LICENSE`、`UNITY_EMAIL`、`UNITY_PASSWOR
 
 ### 本次通知、推送和入口补丁
 
+> **⚠ 历史记录，非当前工程操作步骤**
+>
+> 以下原文仅保留用于追溯旧工程的通知、推送和入口适配。文中的“本次”“当前游戏”均为历史语境，不代表当前工程需要执行这些步骤，也不是本次修改 AndroidManifest 广告 ID 后重新打包的变更清单。**不要仅凭本节自动导入增量包、替换 `KlondikeRoundBootView.cs`，或改动 SDK 初始化、广告及推送流程。** 当前操作应以工程实际文件和用户明确提出的修改要求为准。
+
 已接入 SDK 的当前游戏使用这两个增量包：
 
 1. 导入 `dist/NFShootSDK-ActivityFix.unitypackage`：仅更新桥接 AAR、Editor 构建脚本及两个 Gradle 脚本。该补丁不包含 ShootSdk/Platform 等 C# 广告脚本、广告位参数或供应商 AAR。

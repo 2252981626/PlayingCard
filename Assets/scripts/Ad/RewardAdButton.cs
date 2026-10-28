@@ -34,7 +34,7 @@ public class RewardAdButton : MonoBehaviour
 
     private void AdsOnClick()
     {
-        UIManager.Instance.OpenUIMask();
+        //UIManager.Instance.OpenUIMask();
         UpdateAdsBtnState(false);
         Debug.Log("播放激励广告 page_id :" + page_id);
         //播放广告
