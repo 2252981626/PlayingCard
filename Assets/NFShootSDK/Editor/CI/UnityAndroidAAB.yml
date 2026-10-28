@@ -1,0 +1,148 @@
+# Copy this file to .github/workflows/UnityAndroidAAB.yml in the UNITY project.
+# Requires the updated Assets/NFShootSDK from the same SDK package.
+name: Unity Android AAB Build & Sign
+
+on:
+  workflow_dispatch:
+    inputs:
+      restore_library_cache:
+        description: Restore Library cache only after a successful build with sufficient disk space
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Android AAB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      # A configurable budget for image extraction AND subsequent Android builds.
+      NFSDK_MIN_FREE_GIB: '35'
+    steps:
+      - name: Free Disk Space
+        shell: bash
+        run: |
+          # These paths belong to the disposable GitHub-hosted runner.
+          {
+            df -h /
+            sudo rm -rf \
+              /usr/share/dotnet \
+              /opt/ghc \
+              /usr/local/.ghcup \
+              /usr/local/share/boost \
+              /usr/local/lib/android \
+              /opt/hostedtoolcache/CodeQL
+            sudo apt-get clean
+            docker system prune --all --force
+            df -h /
+          } 2>&1 | tee "$RUNNER_TEMP/nfsdk-disk-cleanup.log"
+          # Install a minimal host SDK in a disposable directory on later steps.
+          printf 'ANDROID_HOME=%s/nfsdk-host-android\nANDROID_SDK_ROOT=%s/nfsdk-host-android\n' \
+            "$RUNNER_TEMP" "$RUNNER_TEMP" >> "$GITHUB_ENV"
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Select installed compatible JDK
+        shell: bash
+        run: bash Assets/NFShootSDK/Editor/CI/select-gameci-java.sh
+
+      - name: Prepare Android SDK components
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: '12266719'
+          packages: >-
+            platform-tools
+            cmdline-tools;6.0
+            platforms;android-36
+            build-tools;36.1.0
+
+      - name: Stage tools in Docker-mounted workspace
+        shell: bash
+        run: |
+          bash Assets/NFShootSDK/Editor/CI/prepare-gameci-tools.sh
+          # The staged SDK is self-contained. Release the temporary source copy.
+          rm -rf "${RUNNER_TEMP:?}/nfsdk-host-android"
+
+      - name: Cache Library
+        if: ${{ inputs.restore_library_cache }}
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android-${{ runner.os }}-${{ hashFiles('ProjectSettings/ProjectVersion.txt') }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-Android-${{ runner.os }}-${{ hashFiles('ProjectSettings/ProjectVersion.txt') }}-
+
+      - name: Check disk budget before pulling Unity image
+        shell: bash
+        run: |
+          {
+            nfsdk_docker_root="$(docker info --format '{{.DockerRootDir}}')"
+            df -h "$nfsdk_docker_root" "$GITHUB_WORKSPACE"
+            df -i "$nfsdk_docker_root"
+            docker system df
+            for nfsdk_path in .ci-tools Library .git; do
+              if [[ -e "$nfsdk_path" ]]; then du -sh "$nfsdk_path"; fi
+            done
+            nfsdk_available_kib="$(df -Pk "$nfsdk_docker_root" | awk 'NR == 2 {print $4}')"
+            nfsdk_required_kib=$((NFSDK_MIN_FREE_GIB * 1024 * 1024))
+            if (( nfsdk_available_kib < nfsdk_required_kib )); then
+              echo "::error::Docker has $((nfsdk_available_kib / 1024 / 1024)) GiB free; this workflow budgets ${NFSDK_MIN_FREE_GIB} GiB for Unity image extraction and building. Keep Library cache disabled or use a runner with more disk."
+              exit 1
+            fi
+          } 2>&1 | tee "$RUNNER_TEMP/nfsdk-disk-before-unity.log"
+
+      - name: Build Android AAB
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          # Keep the same Unity version/image selection as the working workflow.
+          # If your CN editor uses a custom image, retain its customImage here.
+          targetPlatform: Android
+          dockerWorkspacePath: /github/workspace
+          androidExportType: androidAppBundle
+          customParameters: >-
+            -ciBundleId ${{ secrets.CI_BUNDLE_ID }}
+            -nfSdkCi
+            -nfSdkJavaHome /github/workspace/.ci-tools/jdk
+            -nfSdkGradleHome /github/workspace/.ci-tools/gradle-8.13
+            -nfSdkAndroidSdkRoot /github/workspace/.ci-tools/android-sdk
+          androidKeystoreName: user.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEY_ALIAS }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEY_PASS }}
+          androidTargetSdkVersion: AndroidApiLevelAuto
+          versioning: None
+
+      - name: Clean temporary keystore
+        if: always()
+        run: rm -f "$GITHUB_WORKSPACE/user.keystore"
+
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-Release-AAB
+          path: build/Android/**/*.aab
+          if-no-files-found: error
+          retention-days: 5
+
+      - name: Upload Build Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-Build-Logs
+          path: |
+            build/**/*.log
+            Logs/**/*.log
+            ${{ runner.temp }}/nfsdk-disk-*.log
+          if-no-files-found: ignore
+          retention-days: 5

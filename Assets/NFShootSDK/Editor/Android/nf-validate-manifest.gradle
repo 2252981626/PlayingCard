@@ -1,0 +1,48 @@
+// Check the actual merged application manifest after all plugin contributions.
+class NfManifestValidator {
+    static void validate(File file) {
+        def manifest = new XmlSlurper(false, true).parse(file)
+        manifest.declareNamespace(android: 'http://schemas.android.com/apk/res/android', tools: 'http://schemas.android.com/tools')
+        def app = manifest.application
+        def expected = 'com.example.myapplication.MainActivity'
+        def isLauncher = { component ->
+            component.'intent-filter'.any { filter ->
+                filter.action.any { it.'@android:name'.text() == 'android.intent.action.MAIN' } &&
+                filter.category.any { it.'@android:name'.text() == 'android.intent.category.LAUNCHER' }
+            }
+        }
+        // AGP may retain merger directives until packaging. A removal marker is
+        // not an active Activity and must not be reported as a duplicate entry.
+        def activities = app.activity.findAll { it.'@tools:node'.text() != 'remove' }
+        def launchers = activities.findAll(isLauncher).collect { it.'@android:name'.text() }
+        def aliases = app.'activity-alias'.findAll { it.'@tools:node'.text() != 'remove' }.findAll(isLauncher)
+        if (launchers != [expected] || aliases.any { it.'@android:targetActivity'.text() != expected })
+            throw new IllegalStateException("NF Shoot SDK: merged launcher mismatch in ${file}: ${launchers}. Expected ${expected}; check plugin manifests.")
+        if (app.'@android:name'.text() != 'com.example.myapplication.MyApplication')
+            throw new IllegalStateException("NF Shoot SDK: merged Application does not initialize the ad SDK: ${file}")
+        def target = app.'meta-data'.findAll { it.'@android:name'.text() == 'custom_notification_android_activity' }
+        if (target.size() != 1 || target[0].'@android:value'.text() != expected)
+            throw new IllegalStateException("NF Shoot SDK: merged notification Activity mismatch: ${file}")
+        def oldEntries = activities.findAll {
+            it.'@android:name'.text() in ['com.unity3d.player.UnityPlayerActivity', 'com.google.firebase.MessagingUnityPlayerActivity']
+        }
+        if (oldEntries.size() != 0)
+            throw new IllegalStateException("NF Shoot SDK: legacy Unity Activities remain in ${file}; check plugin manifest merge rules.")
+        app.service.findAll { it.'@android:name'.text() == 'com.google.firebase.messaging.MessageForwardingService' }.each {
+            if (it.'@android:permission'.text() != 'android.permission.BIND_JOB_SERVICE')
+                throw new IllegalStateException("NF Shoot SDK: Firebase forwarding service must retain BIND_JOB_SERVICE: ${file}")
+        }
+    }
+}
+
+tasks.configureEach { task ->
+    if (task.name.startsWith('process') && task.name.endsWith('MainManifest')) {
+        task.doLast {
+            def manifests = task.outputs.files.asFileTree.matching { include '**/AndroidManifest.xml' }.files
+            if (manifests.empty)
+                throw new IllegalStateException("NF Shoot SDK: no merged AndroidManifest.xml found in ${task.path} outputs.")
+            manifests.each { NfManifestValidator.validate(it) }
+            logger.lifecycle('NF Shoot SDK: merged Activity, Application and notification target verified.')
+        }
+    }
+}

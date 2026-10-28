@@ -1,0 +1,22 @@
+// Applied to settings.gradle, not to a project build.gradle.
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jfrog.anythinktech.com/artifactory/overseas_sdk' }
+        maven { url 'https://artifact.bytedance.com/repository/pangle' }
+        // Route these modules directly to the working publisher repository.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'NFShootBidMachine'
+                    url = uri('https://artifactory.appodeal.com/appodeal')
+                }
+            }
+            filter {
+                includeGroupByRegex('io\\.bidmachine(\\..*)?')
+                includeGroup('com.explorestack')
+            }
+        }
+    }
+}

@@ -64,6 +64,7 @@
     <Compile Include="Assets\scripts\Panel\EvaluationGamePanel.cs" />
     <Compile Include="Assets\scripts\Config\LevelConfigData.cs" />
     <Compile Include="Assets\scripts\PlayingCard\PlayingCard.cs" />
+    <Compile Include="Assets\NFShootSDK\Runtime\ShotSdk\MaxEventExecutor.cs" />
     <Compile Include="Assets\scripts\Ad\AdManager.cs" />
     <Compile Include="Assets\scripts\AB\SwitchAorBSprite.cs" />
     <Compile Include="Assets\scripts\LobbyScene\LobbyHomePanel.cs" />
@@ -104,8 +105,10 @@
     <Compile Include="Assets\scripts\EventSystem\GameEvent.cs" />
     <Compile Include="Assets\scripts\BI\ApiResponse.cs" />
     <Compile Include="Assets\scripts\TxElement\TxElementGameStartPanel.cs" />
+    <Compile Include="Assets\NFShootSDK\Runtime\ShotSdk\AdParam.cs" />
     <Compile Include="Assets\scripts\TwoPointMiddle.cs" />
     <Compile Include="Assets\scripts\Guide\GuidePanel_Architecture2.cs" />
+    <Compile Include="Assets\NFShootSDK\Runtime\ShotSdk\ShootSdk.cs" />
     <Compile Include="Assets\scripts\GameScene\sceneitem\GameSceneItem_Exchange.cs" />
     <Compile Include="Assets\scripts\Ad\RewardAdButton.cs" />
     <Compile Include="Assets\scripts\Guide\GuidePanel_dailychangle.cs" />
@@ -124,6 +127,7 @@
     <Compile Include="Assets\scripts\gamebox\GameBox.cs" />
     <Compile Include="Assets\scripts\Effect\GoldFlyControl.cs" />
     <Compile Include="Assets\scripts\TxElement\TxElementMananger.cs" />
+    <Compile Include="Assets\NFShootSDK\Runtime\ShotSdk\Platform.cs" />
     <Compile Include="Assets\scripts\Guide\GuidePanel_TxPanel2.cs" />
     <Compile Include="Assets\scripts\GameApiConfig.cs" />
     <Compile Include="Assets\scripts\Panel\PlayerInfoUI.cs" />
@@ -171,9 +175,11 @@
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-app-unity\maven-metadata.xml" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-messaging-unity\maven-metadata.xml" />
     <None Include="Assets\Firebase\Plugins\x86_64\FirebaseCppApp-13_2_0.dll" />
+    <None Include="Assets\NFShootSDK\VALIDATION.txt" />
     <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-analytics-unity\maven-metadata.xml" />
     <None Include="Assets\Firebase\Plugins\Firebase.Platform.dll" />
     <None Include="Assets\Firebase\Plugins\Google.MiniJson.dll" />
+    <None Include="Assets\NFShootSDK\Runtime\link.xml" />
     <None Include="Assets\Firebase\Plugins\iOS\Firebase.App.dll" />
   </ItemGroup>
   <ItemGroup>

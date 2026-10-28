@@ -88,6 +88,20 @@ public class AdManager : MonoBehaviour
     /// </summary>
     public void ShowRewardedAd(string _page_id, Action _rewardCallback, Action _displayErrorCallback)
     {
+        if (ShootSdk.Instance == null)
+        {
+            Debug.LogWarning("[AdManager] ShootSdk is not initialized; add ShootSdk to the startup scene.");
+            _displayErrorCallback?.Invoke();
+            return;
+        }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        ShootSdk.Instance.PlayRewardAds(_rewardCallback);
+#else
+        Debug.Log("[AdManager] Rewarded ads are available in Android players only.");
+        _displayErrorCallback?.Invoke();
+#endif
+
         //applovinMaxRewardOperator.RewardReceivedCallback = _rewardCallback;
         //applovinMaxRewardOperator.RewardDisplayErrorCallback = _displayErrorCallback;
         //applovinMaxRewardOperator.ShowRewardedAd();
@@ -116,10 +130,16 @@ public class AdManager : MonoBehaviour
         if (!mau_inter && insertClickCoolingTime > 0f) return;
         if (string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", ""))) return;
 
+        if (ShootSdk.Instance == null || Platform.Instance == null)
+        {
+            Debug.LogWarning("[AdManager] ShootSdk is not initialized; interstitial request skipped.");
+            return;
+        }
+
         insertClickCoolingTime = Mathf.Max(0f, ad_mau_inter_time);
         Debug.Log($"[AdManager] Interstitial request: page_id={_page_id}, isClick={isClick}");
 
-        // TODO: Call the interstitial SDK here.
+        ShootSdk.Instance.PlayInterstitialAds(null);
     }
 
 }

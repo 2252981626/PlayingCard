@@ -1,0 +1,11 @@
+<linker>
+  <assembly fullname="Assembly-CSharp">
+    <type fullname="Platform" preserve="all" />
+    <type fullname="JavaProxyCallback" preserve="all" />
+    <type fullname="ShootSdk" preserve="all" />
+    <type fullname="SootSdkInit" preserve="all" />
+    <type fullname="AdParam" preserve="all" />
+    <type fullname="AdType" preserve="all" />
+    <type fullname="MaxEventExecutor" preserve="all" />
+  </assembly>
+</linker>

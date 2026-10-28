@@ -1,0 +1,29 @@
+subprojects { p ->
+    p.plugins.withId('com.android.application') {
+        p.apply from: rootProject.file('nf-validate-manifest.gradle')
+    }
+    ['com.android.application', 'com.android.library'].each { pluginId ->
+        p.plugins.withId(pluginId) {
+            p.androidComponents.finalizeDsl { android ->
+                android.with {
+                compileSdkVersion 36
+                buildToolsVersion '36.1.0'
+                ndkVersion '23.1.7779620'
+                defaultConfig {
+                    minSdkVersion Math.max(28, minSdkVersion?.apiLevel ?: 28)
+                    targetSdkVersion 36
+                }
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
+                }
+                packagingOptions {
+                    doNotStrip '*/armeabi-v7a/*.so'
+                    doNotStrip '*/arm64-v8a/*.so'
+                    jniLibs { useLegacyPackaging true }
+                }
+                }
+            }
+        }
+    }
+}

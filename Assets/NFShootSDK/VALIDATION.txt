@@ -1,0 +1,110 @@
+NF Shoot SDK validation — 2026-10-27
+
+Unity: 2022.3.62f3c1
+
+PASS: 13 original Java sources compile with --release 11. Bridge AAR contains
+      only 15 self-owned classes; no Unity engine or vendor classes embedded.
+PASS: Android and Editor C# branches compile against the original game's real
+      AdjustSdk.Scripts assembly. No synthetic dependency stubs are distributed.
+PASS: Original four ShotSdk C# public method sets and script meta GUIDs retained.
+PASS: Actual AGP 8.13.1 test project: checkReleaseDuplicateClasses,
+      compileReleaseJavaWithJavac, processReleaseMainManifest.
+BASELINE PASS: The original .unitypackage imported using AssetDatabase.ImportPackage in Unity
+      2022.3.62f3c1, with the host's actual Adjust sources. Runtime and editor
+      scripts compiled. Android-only AAR importer settings and idempotent Gradle
+      patching validated.
+PASS: Temporary Unity player compiled IL2CPP for ARMv7 and ARM64.
+
+LIMIT: Final APK assembly was interrupted by 'No space left on device' during
+       resource/dex/cache writes. A complete APK and on-device ad/revenue/push
+       behavior have not been verified. Only this validation's generated build
+       intermediates were removed afterward.
+
+Local toolchain used: Unity embedded JDK 11 launcher, external Gradle 8.13,
+JDK 18 Gradle daemon, AGP 8.13.1, Android SDK 36, NDK 23.1.7779620.
+JDK 17 is the recommended Gradle daemon JDK for integration.
+
+Original ShotSdk sources remain under UnitySDK/ShotSdk. Adapted copies are under
+Assets/NFShootSDK/Runtime/ShotSdk. OPS attributes are conditional on
+NFSDK_OPS_OBFUSCATOR; Adjust Unity SDK remains a host dependency.
+
+GameCI v4 adapter update:
+PASS: Updated runtime/editor C# scripts compile against the installed Unity and
+      the host game's real Adjust assembly.
+PASS: Actual SDK argument reader selects container CLI paths ahead of environment
+      variables, retains direct environment support, and rejects missing values.
+PASS: Workflow YAML, container workspace mapping and argument names validated.
+PASS: Tool staging script exercised with isolated fixture tools: file copying,
+      executable permissions, repeat runs, missing SDK component rejection and
+      corrupt Gradle checksum rejection. Fixture tools are not distributed.
+PASS: Google repository metadata confirms cmdline-tools;6.0 is available.
+LIMIT: No Docker/GitHub Actions run was launched from this local environment.
+
+Disk-space workflow update:
+PASS: Pinned Ubuntu runner, cleanup-before-SDK ordering, temporary host SDK,
+      default-disabled Library restore, and shell block syntax validated.
+PASS: Disk-budget check exercised with isolated Docker/df fixtures: 48 GiB
+      passes; 20 GiB fails with a retained diagnostic log under pipefail.
+LIMIT: Actual reclaimed space and Unity image extraction must be confirmed on
+       the GitHub runner. The 35 GiB budget is configurable, not a guarantee.
+
+Portable JDK / trust store update:
+PASS: Installed-JDK selection prefers a compatible JAVA_HOME and falls back
+      from Java 11 or Java 25 to an installed compatible JDK; spaced paths work.
+PASS: Absolute host links for cacerts and java.security are copied as files.
+      After removing the simulated host directory, actual Java keytool still
+      loads the staged trust store. The original certificate bytes are retained.
+PASS: Missing source cacerts is rejected before replacing the staged JDK.
+      Missing runtime configuration is rejected; optional broken src.zip is skipped.
+PASS: Updated tool preparation passes isolated repeated-run, SDK component,
+      executable permission and Gradle checksum checks.
+PASS: Updated Runtime, RuntimeEditor and Editor C# assemblies compile against
+      the installed Unity and real Adjust assembly. Editor trust store checks
+      reject missing/empty files and accept a readable nonempty file.
+LIMIT: The regression reproduces the host-link failure locally; the user's
+       runner link target and a complete remote Actions build remain unverified.
+
+Mobile Notifications Activity update:
+CAUSE: The supplied device stack trace fails in notification channel registration
+       inside KlondikeRoundBootView.Dismiss, before the loading view is closed.
+       Notifications 2.4.0 cannot infer the renamed MainActivity among ad Activities.
+FIX: Generated application metadata explicitly sets custom_notification_android_activity
+     to com.example.myapplication.MainActivity, matching the launcher.
+PASS: Updated runtime and editor C# assemblies compile against Unity 2022.3.
+PASS: Actual SDK manifest patch applied to the original game's manifest: missing
+      notification target added, existing old target updated, other merge rules
+      retained, and repeated application produces identical XML.
+PASS: Android Manifest Merger 30.4.2 merges the bridge and notification manifests;
+      both default and explicitly configured old library targets resolve to
+      MainActivity, retaining the notification receiver and a declared target Activity.
+LIMIT: The updated APK and notification-tap behavior still require device testing.
+
+Notification / FCM integration patch (advertising preserved):
+FIX: MainActivity only adds onNewIntent forwarding after Unity's original callback.
+     Its original onCreate and GameEntry setup remain unchanged. No Activity
+     recreation, ad initialization, focus handling or C# advertising changes.
+FIX: Generated manifests consolidate known Unity/Firebase entries; the application
+     Gradle manifest task verifies the final entry and notification target.
+FIX: Separate SolitaireStartupFix package catches optional notification/telemetry
+     failures in Dismiss while retaining exception logs and closing the loading view.
+PASS: Original ad Java source hashes, both vendor AAR hashes, existing SDK C#
+      runtime hashes and old ad/helper class bytes match their baselines.
+PASS: 14 Java sources compile with --release 11 against actual Android/Unity/vendor
+      APIs. AAR contains 16 self-owned classes; Unity/Firebase engines are not embedded.
+PASS: Isolated production Java Activity/FCM tests cover ordinary/local notification
+      intents, both FCM message ID keys, preserved payload/URI, missing optional
+      Firebase and failing forwarding service. Original onCreate behavior retained.
+PASS: Actual SDK C# manifest patch covers Unity/Firebase/custom known entries,
+      duplicate consolidation, library deep links, metadata, repeated execution
+      and rejection of unknown custom host lifecycle code.
+PASS: Actual Android Manifest Merger 30.4.2 combines bridge, notification, Adjust,
+      SolarEngine, Firebase and a legacy launcher fixture; packaged output retains
+      only MainActivity and the Firebase forwarding service.
+PASS: Groovy validator accepts merged/packaged manifests and rejects old entries,
+      wrong notification/Application, invalid Firebase service and extra launchers.
+PASS: Real Gradle 8.13 offline manifest task runs the output validation hook.
+PASS: SDK C# branches and the separate game patch compile against installed Unity
+      and real game/Adjust/Retention/DOTween assemblies. Loading-close tests cover
+      successful initialization and notification/telemetry failures separately/together.
+LIMIT: No new complete APK, live FCM delivery, notification tap, ad reward/revenue
+       or background/resume behavior has been verified on an Android device here.

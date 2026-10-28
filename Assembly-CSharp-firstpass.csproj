@@ -1174,10 +1174,6 @@
       <Project>{B951B5F7-99E4-44B1-DDE4-8F94AE6976D8}</Project>
       <Name>SolarEngineSDK.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="MaxSdk.Scripts.csproj">
-      <Project>{F3C82DA6-ED9D-7A13-F26C-E031E6874359}</Project>
-      <Name>MaxSdk.Scripts</Name>
-    </ProjectReference>
     <ProjectReference Include="AdjustSdk.Scripts.csproj">
       <Project>{6FB1BECC-0EB8-50A8-5669-7940F5D87389}</Project>
       <Name>AdjustSdk.Scripts</Name>
@@ -1185,10 +1181,6 @@
     <ProjectReference Include="FirebaseMessagingActivityGenerator.csproj">
       <Project>{1951F2D3-34BA-2617-1C71-988AFA76D0D1}</Project>
       <Name>FirebaseMessagingActivityGenerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="MaxSdk.Scripts.IntegrationManager.Editor.csproj">
-      <Project>{C1553732-7D59-6A35-1085-DCBDA29C8F3E}</Project>
-      <Name>MaxSdk.Scripts.IntegrationManager.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="SolarEngineSDK.csproj">
       <Project>{51AE726C-4CD3-0DE9-820C-5B1E1F73532B}</Project>

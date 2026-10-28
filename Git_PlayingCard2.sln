@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarEngineSDK", "SolarEngi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdjustSdk.Scripts", "AdjustSdk.Scripts.csproj", "{6FB1BECC-0EB8-50A8-5669-7940F5D87389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{F847A261-C613-AD6B-B4D7-683FA2EC1BF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiger.Retention", "Tiger.Retention.csproj", "{E6062FD8-0CA8-E244-7307-8258C840FC5E}"
@@ -18,8 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiger.Retention.Editor", "Tiger.Retention.Editor.csproj", "{18C11303-80B9-BBE3-504A-C49121ED215E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RetentionNotification.Tests", "RetentionNotification.Tests.csproj", "{4186261F-7658-F13C-214A-432B162638D4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirebaseMessagingActivityGenerator", "FirebaseMessagingActivityGenerator.csproj", "{1951F2D3-34BA-2617-1C71-988AFA76D0D1}"
 EndProject
@@ -49,6 +49,10 @@ Global
 		{6FB1BECC-0EB8-50A8-5669-7940F5D87389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FB1BECC-0EB8-50A8-5669-7940F5D87389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FB1BECC-0EB8-50A8-5669-7940F5D87389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F847A261-C613-AD6B-B4D7-683FA2EC1BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F847A261-C613-AD6B-B4D7-683FA2EC1BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F847A261-C613-AD6B-B4D7-683FA2EC1BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,10 +73,6 @@ Global
 		{4186261F-7658-F13C-214A-432B162638D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4186261F-7658-F13C-214A-432B162638D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4186261F-7658-F13C-214A-432B162638D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAD5E7B5-D344-B9C7-0D40-DCBEA04B87BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1951F2D3-34BA-2617-1C71-988AFA76D0D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1951F2D3-34BA-2617-1C71-988AFA76D0D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1951F2D3-34BA-2617-1C71-988AFA76D0D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
