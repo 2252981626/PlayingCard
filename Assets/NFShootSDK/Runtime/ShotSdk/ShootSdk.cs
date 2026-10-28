@@ -155,6 +155,8 @@ public class ShootSdk : MonoBehaviour
 #endif
     public void OnAwardRevenut(AdParam param)
     {
+        if (param == null) return;
+
         double revenue = param.revenue;
 
         if (revenue > 0)
@@ -184,6 +186,29 @@ public class ShootSdk : MonoBehaviour
             //FirebaseAnalytics.LogEvent("ad_impression", impressionParameters);
         }
 
+        FirebaseAdAnalytics.LogAdImpression(
+            param.sourceName, param.UIntIdStr, revenue, FirebaseAdAnalytics.AdFormatRewarded);
+
+        if (OtherSdkManager.IsInit)
+        {
+            try
+            {
+                var impressionAttributes = new SolarEngine.ImpressionAttributes();
+                impressionAttributes.ad_platform = param.sourceName;
+                impressionAttributes.ad_id = param.UIntIdStr;
+                impressionAttributes.ad_type = 1;
+                impressionAttributes.ad_ecpm = revenue * 1000;
+                impressionAttributes.currency_type = "USD";
+                impressionAttributes.mediation_platform = "max";
+                impressionAttributes.is_rendered = true;
+                SolarEngine.Analytics.trackAdImpression(impressionAttributes);
+            }
+            catch (Exception error)
+            {
+                Debug.LogWarning("[ShootSdk] Rewarded impression reporting failed: " + error.Message);
+            }
+        }
+
         AddAwardAddSave();
     }
 
@@ -203,6 +228,7 @@ public class ShootSdk : MonoBehaviour
 #endif
     public void OnInterstitialAdRevenuePaid(AdParam param)
     {
+        if (param == null) return;
 
         double revenue = param.revenue;
 
@@ -236,6 +262,29 @@ public class ShootSdk : MonoBehaviour
             //	new Parameter("currency", "USD")
             //};
             //FirebaseAnalytics.LogEvent("ad_impression", impressionParameters);
+        }
+
+        FirebaseAdAnalytics.LogAdImpression(
+            param.sourceName, param.UIntIdStr, revenue, FirebaseAdAnalytics.AdFormatInterstitial);
+
+        if (OtherSdkManager.IsInit)
+        {
+            try
+            {
+                var impressionAttributes = new SolarEngine.ImpressionAttributes();
+                impressionAttributes.ad_platform = param.sourceName;
+                impressionAttributes.ad_id = param.UIntIdStr;
+                impressionAttributes.ad_type = 3;
+                impressionAttributes.ad_ecpm = revenue * 1000;
+                impressionAttributes.currency_type = "USD";
+                impressionAttributes.mediation_platform = "max";
+                impressionAttributes.is_rendered = true;
+                SolarEngine.Analytics.trackAdImpression(impressionAttributes);
+            }
+            catch (Exception error)
+            {
+                Debug.LogWarning("[ShootSdk] Interstitial impression reporting failed: " + error.Message);
+            }
         }
 
     }
