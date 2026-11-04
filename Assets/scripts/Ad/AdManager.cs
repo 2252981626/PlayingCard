@@ -51,7 +51,7 @@ public class AdManager : MonoBehaviour
         if (insertTimer <= 0f && insertClickCoolingTime <= 0f)
         {
             ResetInterstitialTimer(insertTime);
-            OnClickInterstitialAd("auto_interstitial_show", false);
+            //OnClickInterstitialAd("auto_interstitial_show", false);
         }
     }
 
