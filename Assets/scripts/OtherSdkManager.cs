@@ -1,5 +1,4 @@
 using AdjustSdk;
-using ShootFramework.SDK;
 using SolarEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +11,6 @@ public class OtherSdkManager : MonoBehaviour
 
     public static bool IsInit = false;
 
-    private PixalateSystem pixalateSystem;
-    private static readonly string AdgroupPlayerPrefsKey = $"Adjust_CurrentAdgroup";
     private void Awake()
     {
         Instance = this;
@@ -24,111 +21,15 @@ public class OtherSdkManager : MonoBehaviour
     {
         Debug.Log("Other SDK初始化");
 
-        pixalateSystem = new PixalateSystem();
-        pixalateSystem.Init();
         AdjustInit();
         SolarEngineInit();
-    }
-    //------------------------------------------------------------------------------------------------
-    public void SendPixalateRequest(string AdUnitId)
-    {
-        pixalateSystem.SendPixalateRequest(AdUnitId);
     }
 
     private void AdjustInit()
     {
-        CurrentAdjustAdgroup = PlayerPrefs.GetString(AdgroupPlayerPrefsKey, string.Empty).Trim();
         string adjust_AppToken = "cgxrt57p00e8";
         AdjustConfig adjustConfig = new AdjustConfig(adjust_AppToken, AdjustEnvironment.Production);
-        adjustConfig.LogLevel = AdjustLogLevel.Verbose;
-        adjustConfig.AttributionChangedDelegate = AttributionChangedCallback;
-        adjustConfig.DeferredDeeplinkDelegate = DeferredDeeplinkCallback;
         Adjust.InitSdk(adjustConfig);
-    }
-
-
-    public void AttributionChangedCallback(AdjustAttribution attributionData)
-    {
-        Debug.Log("Attribution changed!");
-
-        if (attributionData == null)
-        {
-            Debug.LogError("Adjust attribution data is null.");
-            return;
-        }
-
-        string adgroup = attributionData.Adgroup?.Trim();
-        Debug.Log($"Adjust adgroup received. raw='{attributionData.Adgroup ?? "<null>"}', normalized='{adgroup ?? "<null>"}'");
-        if (!string.IsNullOrEmpty(adgroup) && !string.Equals(CurrentAdjustAdgroup, adgroup, System.StringComparison.Ordinal))
-        {
-            CurrentAdjustAdgroup = adgroup;
-            PlayerPrefs.SetString(AdgroupPlayerPrefsKey, CurrentAdjustAdgroup);
-            PlayerPrefs.Save();
-        }
-
-        if (attributionData.TrackerName != null)
-        {
-            Debug.Log("Tracker name: " + attributionData.TrackerName);
-        }
-        if (attributionData.TrackerToken != null)
-        {
-            Debug.Log("Tracker token: " + attributionData.TrackerToken);
-        }
-        if (attributionData.Network != null)
-        {
-            int value = PlayerPrefs.GetInt(Application.identifier + "FirstAttribution", 0);
-            Debug.Log("Network: " + attributionData.Network);
-            if (value == 0)
-            {
-                if (!attributionData.Network.Equals("Organic"))
-                {
-                    //TMPlayerManager.Instance.SetNormal(false);
-				    //SolarEngineMgr.Instance.UserGroup("B");
-                    //JGMAnalysicEventServer.Instance.TrackUserSCEvent();
-                }
-                else
-                {
-                    //JGMAnalysicEventServer.Instance.TrackUserZCEvent();
-					//SolarEngineMgr.Instance.UserGroup("A");
-                }
-                PlayerPrefs.SetInt(Application.identifier + "FirstAttribution", 1);
-                PlayerPrefs.Save();
-            }
-
-        }
-        if (attributionData.Campaign != null)
-        {
-            Debug.Log("Campaign: " + attributionData.Campaign);
-        }
-        if (attributionData.Adgroup != null)
-        {
-            Debug.Log("Adgroup: " + attributionData.Adgroup);
-        }
-        if (attributionData.Creative != null)
-        {
-            Debug.Log("Creative: " + attributionData.Creative);
-        }
-        if (attributionData.ClickLabel != null)
-        {
-            Debug.Log("Click label: " + attributionData.ClickLabel);
-        }
-        if (attributionData.JsonResponse != null)
-        {
-            Debug.Log("JsonResponse: " + attributionData.GetJsonResponseAsString());
-        }
-    }
-    private void DeferredDeeplinkCallback(string deeplinkURL)
-    {
-        Debug.Log("Deferred deeplink reported!");
-
-        if (deeplinkURL != null)
-        {
-            Debug.Log("Deeplink URL: " + deeplinkURL);
-        }
-        else
-        {
-            Debug.Log("Deeplink URL is null!");
-        }
     }
 
     //------------------------------------------------------------------------------------------------
@@ -142,7 +43,7 @@ public class OtherSdkManager : MonoBehaviour
         #region 远程参数默认兜底配置
         // att_code：归因标识字符串，用于区分渠道/归因类型，后台下发不同渠道标识，空字符串为默认
         SESDKRemoteConfig.Item item_att_code = remoteConfig.stringItem("att_code", "F");
-        // mau_inter=true skips the shared cooldown; false enforces it for all requests.
+        // mau_inter：手动插屏强制展示开关；true=忽略插屏冷却间隔，100%展示手动插屏；false=遵循冷却限制
         SESDKRemoteConfig.Item item_mau_inter = remoteConfig.boolItem("mau_inter", false);
         // inter_show_space：全局插屏公共冷却时长(秒)；所有插屏（手动/自动）共用的冷却间隔
         SESDKRemoteConfig.Item item_inter_show_space = remoteConfig.intItem("inter_show_space", 45);
@@ -204,18 +105,18 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 inter_enable = " + result);
                 if (bool.TryParse(result, out bool interEnable))
                 {
-                    AdManager.inter_enable = interEnable;
+                    ApplovinMaxInterstitialOperator.inter_enable = interEnable;
                 }
             }
 
-            // mau_inter=true skips the shared cooldown; false enforces it for all requests.
+            // mau_inter - 手动插屏是否强制展示；true忽略冷却间隔，100%展示手动插屏
             if (allConfig.TryGetValue("mau_inter", out var mauInterObj))
             {
                 string result = mauInterObj.ToString();
                 Debug.Log("远程参数 mau_inter = " + result);
                 if (bool.TryParse(result, out bool mauInter))
                 {
-                    AdManager.mau_inter = mauInter;
+                    ApplovinMaxInterstitialOperator.mau_inter = mauInter;
                 }
             }
 
@@ -226,7 +127,7 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 inter_show_space = " + result);
                 if (int.TryParse(result, out int interSpace))
                 {
-                    AdManager.ad_mau_inter_time = interSpace;
+                    ApplovinMaxInterstitialOperator.ad_mau_inter_time = interSpace;
                 }
             }
 
@@ -237,7 +138,7 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 auto_inter_space = " + result);
                 if (int.TryParse(result, out int autoInterSpace))
                 {
-                    AdManager.insertTime = autoInterSpace;
+                    ApplovinMaxInterstitialOperator.insertTime = autoInterSpace;
                 }
             }
 
@@ -248,10 +149,10 @@ public class OtherSdkManager : MonoBehaviour
                 Debug.Log("远程参数 start_inter_sec = " + result);
                 if (int.TryParse(result, out int startInterSec))
                 {
-                    AdManager.startInsertTime = startInterSec;
+                    ApplovinMaxInterstitialOperator.startInsertTime = startInterSec;
                     if (AdManager.Instance != null)
                     {
-                        AdManager.Instance.ResetInterstitialTimer(startInterSec);
+                        AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = startInterSec;
                     }
                 }
             }

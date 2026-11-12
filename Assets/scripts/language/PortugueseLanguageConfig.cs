@@ -15,6 +15,7 @@ public static class PortugueseLanguageConfig
         {"CLAIMX10", "ResgatarX10"},
         {"CLAIMX2", "ResgatarX2"},
         {"CLAIM", "Resgatar"},
+        {"Claim", "Resgatar"},
         {"CONTINUE", "Continuar"},
         {"QUIT", "Sair"},
         {"BUY", "Comprar"},

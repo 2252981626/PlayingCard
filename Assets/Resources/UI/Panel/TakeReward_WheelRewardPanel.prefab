@@ -536,7 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca172b1b9ee7cb843a193c935893b1b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: CLAIM
+  key: Claim
 --- !u!114 &58572412805687852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -943,7 +943,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: claim
+  m_Text: Only Claim
 --- !u!114 &2616783071803780024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1088,11 +1088,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873731270801712449, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
       propertyPath: m_Text
-      value: CLAIMX2
+      value: Claim
       objectReference: {fileID: 0}
     - target: {fileID: 7092674174787791893, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
       propertyPath: key
-      value: CLAIM
+      value: Claim
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

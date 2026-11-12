@@ -753,18 +753,17 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
 
     private void NextLevel(int curLv)
     {
-        Action openEvaluationGame = () =>
-        {
-            string str = PlayerPrefs.GetString("EvaluationGame", "");
-            if (string.IsNullOrEmpty(str) && GameManager.Instance.IsAfterFirstGameDay())
-            {
-                UIManager.Instance.OpenUI<EvaluationGamePanel>();
-            }
-        };
-
         if (GameManager.Instance.gameType == GameType.MainGame)
         {
-            GameManager.Instance.EvaluationGameCallback = openEvaluationGame;
+            if (GameManager.Instance.playerInfo.level >= 3 &&
+                string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", "")))
+            {
+                GameManager.Instance.EvaluationGameCallback = () =>
+                {
+                    UIManager.Instance.OpenUI<EvaluationGamePanel>();
+                };
+            }
+
             UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
         }
         else if (GameManager.Instance.gameType == GameType.DailyGame)
@@ -774,7 +773,6 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
             UIManager.Instance.GetUI<GameScenePanel>().Hide();
             UIManager.Instance.OpenUI<LobbyScenePanel>(2);
             AudioManager.Instance.PlayBGM("BGM1");
-            openEvaluationGame();
         }
 
         GameManager.Instance.SavePlayerInfo();

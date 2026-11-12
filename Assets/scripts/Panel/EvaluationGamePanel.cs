@@ -125,10 +125,8 @@ public class EvaluationGamePanel : UIBase
         if (string.IsNullOrEmpty(str))
         {
             Debug.Log("EvaluationGame - yes");
-            if (AdManager.Instance != null)
-            {
-                AdManager.Instance.ResetInterstitialAfterEvaluation();
-            }
+            AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = 0f;
+            AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
             PlayerPrefs.SetString("EvaluationGame", "yes");
             OtherSdkManager.Instance.CustomEvent("game_60s_start", "time", SecondsToHMS(Time.realtimeSinceStartup));
         }
