@@ -72,7 +72,7 @@ public class TakeReward_WheelRewardPanel : UIBase
         {
             unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond__unit");
         }
-        collectText.text = $"{LanguageManager.Instance.GetText("CLAIM")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
+        collectText.text = $"{LanguageManager.Instance.GetText("OnlyClaim")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
         rewardAdButton.Init(AdsCallback, page_id, _isContainGold);
 
         rewardAdButton.gameObject.SetActive(GameManager.Instance.playerInfo.level > 2);

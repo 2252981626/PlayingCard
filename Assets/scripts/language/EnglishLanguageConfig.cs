@@ -12,6 +12,7 @@ public static class EnglishLanguageConfig
         {"CLAIMX10", "CLAIMX10"},
         {"CLAIMX2", "CLAIMX2"},
         {"CLAIM", "CLAIM"},
+        {"Claim", "Claim"},
         {"CONTINUE", "CONTINUE"},
         {"QUIT", "QUIT"},
         {"BUY", "BUY"},

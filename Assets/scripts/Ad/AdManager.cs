@@ -62,6 +62,8 @@ public class AdManager : MonoBehaviour
     /// </summary>
     public void OnClickInterstitialAd(string _page_id, bool isClick = true)
     {
+        if (GameManager.Instance.playerInfo.level <= 3) return;
+
         applovinMaxInterstitialOperator.OnClickInterstitialAd(_page_id, isClick);
     }
 

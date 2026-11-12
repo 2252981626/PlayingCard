@@ -33,19 +33,10 @@ public class GameManager : MonoBehaviour
     public Material liziMa;
     public Action EvaluationGameCallback;
 
-    private const string FirstGameDateKey = "FirstGameDate";
-
     public int addDebug_hours = 0;
     private void Awake()
     {
         Instance = this;
-
-        if (!PlayerPrefs.HasKey(FirstGameDateKey))
-        {
-            PlayerPrefs.SetString(FirstGameDateKey,
-                GetNowTime().ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture));
-            PlayerPrefs.Save();
-        }
 
         Application.targetFrameRate = 60;
         Input.multiTouchEnabled = false;
@@ -162,15 +153,6 @@ public class GameManager : MonoBehaviour
 
         // 满足以上条件则认为格式有效
         return true;
-    }
-
-    public bool IsAfterFirstGameDay()
-    {
-        string firstGameDate = PlayerPrefs.GetString(FirstGameDateKey, "");
-        return DateTime.TryParseExact(firstGameDate, "yyyyMMdd",
-            System.Globalization.CultureInfo.InvariantCulture,
-            System.Globalization.DateTimeStyles.None, out DateTime firstDay)
-            && GetNowTime().Date > firstDay.Date;
     }
 
     /// <summary>

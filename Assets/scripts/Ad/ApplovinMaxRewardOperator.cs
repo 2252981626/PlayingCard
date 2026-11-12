@@ -116,7 +116,6 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     private void OnRewardedAdDisplayedEvent(string adUnitId, MaxSdk.AdInfo adInfo) 
     {
         Debug.Log("激励视频展示");
-        OtherSdkManager.Instance.SendPixalateRequest(adInfo.AdUnitIdentifier);
     }
 
     private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo, MaxSdk.AdInfo adInfo)

@@ -130,7 +130,7 @@ public class PlayingCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         takeRewardType = TakeRewardType.NULL;
         UpdateTakeRewardUI();
 
-        if (GameManager.Instance.playerInfo.level <= 1)
+        if (GameManager.Instance.playerInfo.level <= 9)
         {
             return;
         }
