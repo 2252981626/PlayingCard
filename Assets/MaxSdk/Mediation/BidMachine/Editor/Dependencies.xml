@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dependencies>
     <androidPackages>
-        <androidPackage spec="com.applovin.mediation:bidmachine-adapter:3.8.0.0">
+        <androidPackage spec="com.applovin.mediation:bidmachine-adapter:3.8.0.1">
              <repositories>
                  <repository>https://artifactory.bidmachine.io/bidmachine</repository>
              </repositories>
