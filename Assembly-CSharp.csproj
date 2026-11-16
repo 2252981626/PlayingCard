@@ -84,7 +84,6 @@
     <Compile Include="Assets\scripts\Panel\GameWinPanel.cs" />
     <Compile Include="Assets\scripts\Ad\ApplovinMaxInterstitialOperator.cs" />
     <Compile Include="Assets\scripts\AB\ABbuildManager.cs" />
-    <Compile Include="Assets\scripts\Ad\PixalateSystem.cs" />
     <Compile Include="Assets\scripts\TxElement\TxElementBtn.cs" />
     <Compile Include="Assets\scripts\Manager\GameManager.cs" />
     <Compile Include="Assets\scripts\Guide\GuidePanel_TxBtn.cs" />

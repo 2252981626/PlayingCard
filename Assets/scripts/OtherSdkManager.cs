@@ -1,5 +1,4 @@
 using AdjustSdk;
-using ShootFramework.SDK;
 using SolarEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +11,6 @@ public class OtherSdkManager : MonoBehaviour
 
     public static bool IsInit = false;
 
-    private PixalateSystem pixalateSystem;
-    private static readonly string AdgroupPlayerPrefsKey = $"Adjust_CurrentAdgroup";
     private void Awake()
     {
         Instance = this;
@@ -24,111 +21,19 @@ public class OtherSdkManager : MonoBehaviour
     {
         Debug.Log("Other SDK≥ı ºªØ");
 
-        pixalateSystem = new PixalateSystem();
-        pixalateSystem.Init();
         AdjustInit();
         SolarEngineInit();
     }
     //------------------------------------------------------------------------------------------------
     public void SendPixalateRequest(string AdUnitId)
     {
-        pixalateSystem.SendPixalateRequest(AdUnitId);
     }
 
     private void AdjustInit()
     {
-        CurrentAdjustAdgroup = PlayerPrefs.GetString(AdgroupPlayerPrefsKey, string.Empty).Trim();
         string adjust_AppToken = "cgxrt57p00e8";
         AdjustConfig adjustConfig = new AdjustConfig(adjust_AppToken, AdjustEnvironment.Production);
-        adjustConfig.LogLevel = AdjustLogLevel.Verbose;
-        adjustConfig.AttributionChangedDelegate = AttributionChangedCallback;
-        adjustConfig.DeferredDeeplinkDelegate = DeferredDeeplinkCallback;
         Adjust.InitSdk(adjustConfig);
-    }
-
-
-    public void AttributionChangedCallback(AdjustAttribution attributionData)
-    {
-        Debug.Log("Attribution changed!");
-
-        if (attributionData == null)
-        {
-            Debug.LogError("Adjust attribution data is null.");
-            return;
-        }
-
-        string adgroup = attributionData.Adgroup?.Trim();
-        Debug.Log($"Adjust adgroup received. raw='{attributionData.Adgroup ?? "<null>"}', normalized='{adgroup ?? "<null>"}'");
-        if (!string.IsNullOrEmpty(adgroup) && !string.Equals(CurrentAdjustAdgroup, adgroup, System.StringComparison.Ordinal))
-        {
-            CurrentAdjustAdgroup = adgroup;
-            PlayerPrefs.SetString(AdgroupPlayerPrefsKey, CurrentAdjustAdgroup);
-            PlayerPrefs.Save();
-        }
-
-        if (attributionData.TrackerName != null)
-        {
-            Debug.Log("Tracker name: " + attributionData.TrackerName);
-        }
-        if (attributionData.TrackerToken != null)
-        {
-            Debug.Log("Tracker token: " + attributionData.TrackerToken);
-        }
-        if (attributionData.Network != null)
-        {
-            int value = PlayerPrefs.GetInt(Application.identifier + "FirstAttribution", 0);
-            Debug.Log("Network: " + attributionData.Network);
-            if (value == 0)
-            {
-                if (!attributionData.Network.Equals("Organic"))
-                {
-                    //TMPlayerManager.Instance.SetNormal(false);
-				    //SolarEngineMgr.Instance.UserGroup("B");
-                    //JGMAnalysicEventServer.Instance.TrackUserSCEvent();
-                }
-                else
-                {
-                    //JGMAnalysicEventServer.Instance.TrackUserZCEvent();
-					//SolarEngineMgr.Instance.UserGroup("A");
-                }
-                PlayerPrefs.SetInt(Application.identifier + "FirstAttribution", 1);
-                PlayerPrefs.Save();
-            }
-
-        }
-        if (attributionData.Campaign != null)
-        {
-            Debug.Log("Campaign: " + attributionData.Campaign);
-        }
-        if (attributionData.Adgroup != null)
-        {
-            Debug.Log("Adgroup: " + attributionData.Adgroup);
-        }
-        if (attributionData.Creative != null)
-        {
-            Debug.Log("Creative: " + attributionData.Creative);
-        }
-        if (attributionData.ClickLabel != null)
-        {
-            Debug.Log("Click label: " + attributionData.ClickLabel);
-        }
-        if (attributionData.JsonResponse != null)
-        {
-            Debug.Log("JsonResponse: " + attributionData.GetJsonResponseAsString());
-        }
-    }
-    private void DeferredDeeplinkCallback(string deeplinkURL)
-    {
-        Debug.Log("Deferred deeplink reported!");
-
-        if (deeplinkURL != null)
-        {
-            Debug.Log("Deeplink URL: " + deeplinkURL);
-        }
-        else
-        {
-            Debug.Log("Deeplink URL is null!");
-        }
     }
 
     //------------------------------------------------------------------------------------------------
