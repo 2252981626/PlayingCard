@@ -711,7 +711,6 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
         if (GameManager.Instance.gameType == GameType.MainGame)
         {
             GameManager.Instance.playerInfo.level++;
-            RetentionSetup.OnLevelCompleted(GameManager.Instance.playerInfo.level);
             //Ïä×Ó
             GameBox.Instance.CheckBoxProgress(curLv ,() =>
             {
@@ -755,15 +754,21 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
     {
         if (GameManager.Instance.gameType == GameType.MainGame)
         {
-            if (GameManager.Instance.playerInfo.level >= 3 &&
-                string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", "")))
+            if (curLv % 3 == 0)
             {
                 GameManager.Instance.EvaluationGameCallback = () =>
                 {
-                    UIManager.Instance.OpenUI<EvaluationGamePanel>();
+                    string str = PlayerPrefs.GetString("EvaluationGame", "");
+                    if (string.IsNullOrEmpty(str))
+                    {
+                        PlayerPrefs.SetString("EvaluationGame", "yes");
+                        AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = 0f;
+                        AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
+                        OtherSdkManager.Instance.CustomEvent("game_60s_start", "time", SecondsToHMS(Time.realtimeSinceStartup));
+                    }
+                    //GameManager.Instance.TryEvaluationGame();
                 };
             }
-
             UIManager.Instance.GetUI<GameScenePanel>().ResetGame();
         }
         else if (GameManager.Instance.gameType == GameType.DailyGame)
@@ -774,6 +779,7 @@ public class PlayingCardControl : MonoBehaviour,IEventListener
             UIManager.Instance.OpenUI<LobbyScenePanel>(2);
             AudioManager.Instance.PlayBGM("BGM1");
         }
+
 
         GameManager.Instance.SavePlayerInfo();
     }

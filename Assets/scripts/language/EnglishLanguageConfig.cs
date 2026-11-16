@@ -12,7 +12,6 @@ public static class EnglishLanguageConfig
         {"CLAIMX10", "CLAIMX10"},
         {"CLAIMX2", "CLAIMX2"},
         {"CLAIM", "CLAIM"},
-        {"Claim", "Claim"},
         {"CONTINUE", "CONTINUE"},
         {"QUIT", "QUIT"},
         {"BUY", "BUY"},
@@ -89,8 +88,6 @@ public static class EnglishLanguageConfig
         {"EvaluationGamePanel_title1", "Are you enjoying the game?"},
         {"EvaluationGamePanel_btn1", "Not Really"},
         {"EvaluationGamePanel_btn2", "Love it!"},
-        {"EvaluationGamePanel_btn3", "Later"},
-        {"EvaluationGamePanel_btn4", "Rate"},
         {"EvaluationGamePanel_title2", "Your 5 stars are very important to us.please give us 5 stars if you like it."},
         //Òýµ¼
         {"Guide_TxBtn", "Tap here to view your newly earned {0}!"},

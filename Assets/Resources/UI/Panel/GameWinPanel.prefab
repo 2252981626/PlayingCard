@@ -263,7 +263,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Claim
+  m_Text: CLAIMX10
 --- !u!114 &4199406388180395973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca172b1b9ee7cb843a193c935893b1b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: Claim
+  key: CLAIM
 --- !u!114 &4010021036970234993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1784,7 +1784,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Only Claim
+  m_Text: claim11111
 --- !u!114 &982331125196290099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1811,7 +1811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca172b1b9ee7cb843a193c935893b1b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: OnlyClaim
+  key: CLAIM
 --- !u!1 &7318412394191988039
 GameObject:
   m_ObjectHideFlags: 0
@@ -2662,14 +2662,6 @@ PrefabInstance:
     - target: {fileID: 4829200578304852089, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5873731270801712449, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
-      propertyPath: m_Text
-      value: Claim
-      objectReference: {fileID: 0}
-    - target: {fileID: 7092674174787791893, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
-      propertyPath: key
-      value: Claim
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

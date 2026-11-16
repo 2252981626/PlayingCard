@@ -67,7 +67,8 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
             if (insertTimer <= 0 && insertClickCoolingTime <= 0)
             {
                 insertTimer = insertTime;
-                //OnClickInterstitialAd("auto_interstitial_show", false);
+                OnClickInterstitialAd("auto_interstitial_show", false);
+
             }
             if (insertClickCoolingTime > 0)
             {
@@ -143,6 +144,12 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         //{
         //    return;
         //}
+        //没评分之前
+        string str = PlayerPrefs.GetString("EvaluationGame", "");
+        if (string.IsNullOrEmpty(str))
+        {
+            return;
+        }
         IsClick = isClick;
         page_id = _page_id;
         ShowInterstitialAd();
@@ -186,6 +193,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     private void OnInterstitialDisplayedEvent(string adUnitId, MaxSdk.AdInfo adInfo)
     {
         Debug.Log("插屏广告展示成功");
+        OtherSdkManager.Instance.SendPixalateRequest(adInfo.AdUnitIdentifier);
         if(IsClick)
         {
             OtherSdkManager.Instance.CustomEvent("manual_interstitial_show", "page_id", page_id);

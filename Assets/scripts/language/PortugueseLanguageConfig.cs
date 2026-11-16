@@ -15,7 +15,6 @@ public static class PortugueseLanguageConfig
         {"CLAIMX10", "ResgatarX10"},
         {"CLAIMX2", "ResgatarX2"},
         {"CLAIM", "Resgatar"},
-        {"Claim", "Resgatar"},
         {"CONTINUE", "Continuar"},
         {"QUIT", "Sair"},
         {"BUY", "Comprar"},
@@ -92,8 +91,6 @@ public static class PortugueseLanguageConfig
         {"EvaluationGamePanel_title1", "Você está gostando do jogo?"},
         {"EvaluationGamePanel_btn1", "Não muito"},
         {"EvaluationGamePanel_btn2", "Adoro!"},
-        {"EvaluationGamePanel_btn3", "Depois"},
-        {"EvaluationGamePanel_btn4", "Avaliar"},
         {"EvaluationGamePanel_title2", "Sua avaliação de 5 estrelas é muito importante para nós. Por favor, nos dê 5 estrelas se gostar do jogo."},
         //引导
         {"Guide_TxBtn", "Toque para ver seu novo {0}!"},

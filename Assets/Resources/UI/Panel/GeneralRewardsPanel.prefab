@@ -695,7 +695,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Only Claim
+  m_Text: claim
 --- !u!114 &2616783071803780024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,11 +836,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5873731270801712449, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
       propertyPath: m_Text
-      value: Claim
+      value: CLAIMX2
       objectReference: {fileID: 0}
     - target: {fileID: 7092674174787791893, guid: c16fdd27fdd4839419e234c5955810c6, type: 3}
       propertyPath: key
-      value: Claim
+      value: CLAIM
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

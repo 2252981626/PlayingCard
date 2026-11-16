@@ -155,6 +155,49 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
+    public void TryEvaluationGame()
+    {
+        int evaluationGameStar = PlayerPrefs.GetInt("EvaluationGameStar", 0);
+        // 已经五星，不再弹出
+        if (evaluationGameStar == 5)
+        {
+            return;
+        }
+
+        // 存储键定义
+        string keyShowCount = "EvalGame_DailyShowCount";
+        string keyLastDate = "EvalGame_LastShowDate";
+
+        // 获取今日时间戳（只保留年月日，重置每日计数）
+        string todayDate = GetNowTime().ToString("yyyyMMdd");
+        string saveDate = PlayerPrefs.GetString(keyLastDate, "");
+
+        int todayShowCount = 0;
+        if (saveDate == todayDate)
+        {
+            // 同一天，读取今日已弹出次数
+            todayShowCount = PlayerPrefs.GetInt(keyShowCount, 0);
+        }
+        else
+        {
+            // 跨天，重置次数并更新日期
+            PlayerPrefs.SetString(keyLastDate, todayDate);
+            PlayerPrefs.SetInt(keyShowCount, 0);
+            todayShowCount = 0;
+        }
+
+        // 每日最多弹出2次
+        if (todayShowCount >= 2)
+            return;
+
+        // 打开评分面板
+        UIManager.Instance.OpenUI<EvaluationGamePanel>();
+
+        // 次数+1并保存
+        todayShowCount++;
+        PlayerPrefs.SetInt(keyShowCount, todayShowCount);
+    }
+
     /// <summary>
     /// 创建道具
     /// </summary>

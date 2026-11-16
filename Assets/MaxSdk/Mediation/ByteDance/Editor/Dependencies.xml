@@ -8,9 +8,9 @@
         </androidPackage>
     </androidPackages>
     <iosPods>
-        <iosPod name="AppLovinMediationByteDanceAdapter" version="8.4.0.7.0" />
+        <iosPod name="AppLovinMediationByteDanceAdapter" version="8.4.0.8.0" />
     </iosPods>
-    <remoteSwiftPackage url="https://github.com/AppLovin/AppLovin-MAX-Swift-Package-Pangle.git" version="804000700.0.0">
+    <remoteSwiftPackage url="https://github.com/AppLovin/AppLovin-MAX-Swift-Package-Pangle.git" version="804000800.0.0">
         <swiftPackage name="AppLovinMediationByteDanceAdapter" replacesPod="AppLovinMediationByteDanceAdapter" target="All" />
     </remoteSwiftPackage>
 </dependencies>
