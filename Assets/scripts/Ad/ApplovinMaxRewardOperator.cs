@@ -14,8 +14,6 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     public Action RewardDisplayErrorCallback = null;
     public static bool isPlayRewardAds = false;
     private bool callbacksRegistered;
-    private bool requestActive;
-    private bool rewardReceived;
 
     public virtual void Init()
     {
@@ -55,8 +53,6 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     {
         if (isPlayRewardAds) return;
 
-        requestActive = true;
-        rewardReceived = false;
         if (NativeMaxSdk.IsRewardedAdReady(RewardedAdUnitId))
         {
             isPlayRewardAds = true;
@@ -73,8 +69,6 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     }
     private void ExecutionRewardDisplayErrorCallback()
     {
-        requestActive = false;
-        rewardReceived = false;
         Action callback = RewardDisplayErrorCallback;
         RewardDisplayErrorCallback = null;
         RewardReceivedCallback = null;
@@ -82,8 +76,6 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     }
     private void ExecutionRewardReceivedCallback()
     {
-        requestActive = false;
-        rewardReceived = false;
         Action callback = RewardReceivedCallback;
         RewardReceivedCallback = null;
         RewardDisplayErrorCallback = null;
@@ -118,7 +110,6 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
 
     private void OnRewardedAdFailedToDisplayEvent(string adUnitId, NativeMaxSdk.ErrorInfo errorInfo, NativeMaxSdk.AdInfo adInfo)
     {
-        if (!requestActive) return;
         // Rewarded ad failed to display. AppLovin recommends that you load the next ad.
 
         isPlayRewardAds = false;
@@ -146,17 +137,14 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
 
     private void OnRewardedAdHiddenEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
-        if (!requestActive) return;
         isPlayRewardAds = false;
-        if (rewardReceived) ExecutionRewardReceivedCallback();
-        else ExecutionRewardDisplayErrorCallback();
+        ExecutionRewardDisplayErrorCallback();
         LoadRewardedAd();
     }
 
     private void OnRewardedAdReceivedRewardEvent(string adUnitId, NativeMaxSdk.Reward reward, NativeMaxSdk.AdInfo adInfo)
     {
-        if (!requestActive || rewardReceived) return;
-        rewardReceived = true;
+        ExecutionRewardReceivedCallback();
     }
 
     private void OnRewardedAdRevenuePaidEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
