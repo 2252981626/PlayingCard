@@ -11,6 +11,21 @@ public class AdManager : MonoBehaviour
     public ApplovinMaxRewardOperator applovinMaxRewardOperator;
     public ApplovinMaxInterstitialOperator applovinMaxInterstitialOperator;
 
+    public const int FirstAdLevel = 5;
+
+    public static bool CanPlayAds
+    {
+        get
+        {
+            int progressLevel = GameManager.Instance?.playerInfo?.level ?? 0;
+            if (progressLevel != FirstAdLevel) return progressLevel > FirstAdLevel;
+
+            // Progress advances before the previous round's settlement closes.
+            GameScenePanel gameScene = UIManager.Instance?.GetUI<GameScenePanel>(logIfMissing: false);
+            return gameScene == null || !gameScene.isActiveAndEnabled || gameScene.LevelId >= FirstAdLevel;
+        }
+    }
+
     private bool initializationStarted;
 
     private void Awake()
@@ -80,6 +95,12 @@ public class AdManager : MonoBehaviour
     /// </summary>
     public void ShowRewardedAd(string _page_id, Action _rewardCallback, Action _displayErrorCallback)
     {
+        if (!CanPlayAds)
+        {
+            ShowRewardedAd2(_page_id, _rewardCallback, _displayErrorCallback);
+            return;
+        }
+
         if (ApplovinMaxRewardOperator.isPlayRewardAds)
         {
             _displayErrorCallback?.Invoke();
@@ -106,9 +127,9 @@ public class AdManager : MonoBehaviour
     /// <summary>
     /// ≤Â∆¡π„∏Ê
     /// </summary>
-    public void OnClickInterstitialAd(string _page_id, bool isClick = true)
+    public void OnClickInterstitialAd(string _page_id, bool isClick = true, bool isLevelFourSettlement = false)
     {
-        applovinMaxInterstitialOperator.OnClickInterstitialAd(_page_id, isClick);
+        applovinMaxInterstitialOperator.OnClickInterstitialAd(_page_id, isClick, isLevelFourSettlement);
     }
 
 

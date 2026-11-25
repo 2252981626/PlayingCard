@@ -142,6 +142,7 @@ public class GameWinPanel : UIBase
             itemDatas.Add(new ItemData(ItemType.DiamondDui, Random.Range(20, 41)));
         }
         int curGameWinLv = GameManager.Instance.playerInfo.level - 1;
+        bool canPlayAds = AdManager.CanPlayAds;
         if (curGameWinLv > 50)
         {
             if (TxElementMananger.Instance != null)
@@ -161,7 +162,7 @@ public class GameWinPanel : UIBase
             
         }
         //Ã·«∞X 10
-        if(curGameWinLv <= 2)
+        if (!canPlayAds)
         {
             foreach (var dataconfig in itemDatas)
             {
@@ -181,9 +182,10 @@ public class GameWinPanel : UIBase
             OtherSdkManager.Instance.CustomEvent("newbie_guide_6_complete", "step", "6");
         }
 
-        noAdButton.gameObject.SetActive(curGameWinLv <= 2);
-        rewardAdButton.gameObject.SetActive(curGameWinLv > 2);
-        claimBtn.transform.parent.gameObject.SetActive(curGameWinLv > 2);
+        noAdButton.gameObject.SetActive(!canPlayAds);
+        rewardAdButton.gameObject.SetActive(canPlayAds);
+        claimBtn.transform.parent.gameObject.SetActive(canPlayAds);
+        noAdButton.interactable = true;
     }
 
     private void AdsCallback()
@@ -227,6 +229,9 @@ public class GameWinPanel : UIBase
 
     private void AdsCallback2()
     {
+        noAdButton.interactable = false;
+        bool isLevelFourSettlement = GameManager.Instance.gameType == GameType.MainGame
+            && UIManager.Instance.GetUI<GameScenePanel>().LevelId == 4;
         OtherSdkManager.Instance.CustomEvent("settle_popup_click", "level_id", GameManager.Instance.playerInfo.level - 1, "click", "claim_more");
         OtherSdkManager.Instance.CustomEvent("settlement_ad_reward_claim", "level_id", GameManager.Instance.playerInfo.level - 1);
 
@@ -259,6 +264,10 @@ public class GameWinPanel : UIBase
         {
             playerInfoUI.GoldCanvasRecover();
             playerInfoUI.DiamondCanvasRecover();
+            if (isLevelFourSettlement)
+            {
+                AdManager.Instance.OnClickInterstitialAd(page_id, isLevelFourSettlement: true);
+            }
             Hide();
         });
     }

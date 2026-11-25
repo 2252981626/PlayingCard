@@ -91,14 +91,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public T GetUI<T>() where T : UIBase
+    public T GetUI<T>(bool logIfMissing = true) where T : UIBase
     {
         string className = typeof(T).Name;
         if (uiDict.ContainsKey(className))
         {
             return uiDict[className] as T;
         }
-        Debug.LogWarning($"获取UI失败 → {className}尚未加载/打开");
+        if (logIfMissing) Debug.LogWarning($"获取UI失败 → {className}尚未加载/打开");
         return null;
     }
 

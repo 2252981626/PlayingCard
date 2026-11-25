@@ -34,7 +34,7 @@ public class GameSceneItem_Extract : GameSceneItemBase
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
-        cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_Extract.ToString();
+        RefreshCountText();
 
     }
 

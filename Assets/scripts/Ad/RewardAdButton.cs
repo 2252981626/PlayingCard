@@ -29,7 +29,7 @@ public class RewardAdButton : MonoBehaviour
         UpdateAdsBtnState(true);
         isGetAdsReward = false;
 
-        adIcon.gameObject.SetActive(AdManager.ShowAdIcon);
+        adIcon.gameObject.SetActive(AdManager.ShowAdIcon && AdManager.CanPlayAds);
     }
 
     private void AdsOnClick()
@@ -71,7 +71,7 @@ public class RewardAdButton : MonoBehaviour
     }
     public void UpdateAdsBtnState(bool _bool)
     {
-        adsBtn.interactable = _bool;     
+        adsBtn.interactable = _bool;
         if(adsCanvasGroup != null)
         {
             adsCanvasGroup.alpha = _bool ? 1 : 0.5f;

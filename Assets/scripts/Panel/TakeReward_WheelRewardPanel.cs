@@ -75,9 +75,10 @@ public class TakeReward_WheelRewardPanel : UIBase
         collectText.text = $"{LanguageManager.Instance.GetText("CLAIM")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
         rewardAdButton.Init(AdsCallback, page_id, _isContainGold);
 
-        rewardAdButton.gameObject.SetActive(GameManager.Instance.playerInfo.level > 2);
-        collectTrans.gameObject.SetActive(GameManager.Instance.playerInfo.level > 2);
-        collect2Btn.gameObject.SetActive(GameManager.Instance.playerInfo.level <= 2);
+        bool canPlayAds = AdManager.CanPlayAds;
+        rewardAdButton.gameObject.SetActive(canPlayAds);
+        collectTrans.gameObject.SetActive(canPlayAds);
+        collect2Btn.gameObject.SetActive(!canPlayAds);
 
     }
 

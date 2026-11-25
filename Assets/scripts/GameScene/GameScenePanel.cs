@@ -31,6 +31,7 @@ public class GameScenePanel : UIBase
     public int second = 0;
     public float levelStartTime;
     private int levelId;
+    public int LevelId => levelId;
     private bool settlementShown;
     private float settlementShowTime;
     private bool levelExitReported;
@@ -346,6 +347,8 @@ public class GameScenePanel : UIBase
                         isPause = false;
                         GameManager.Instance.EvaluationGameCallback?.Invoke();
                         GameManager.Instance.EvaluationGameCallback = null;
+
+                        GuideTxBtn();
                     });
                 }
                 else
@@ -381,7 +384,7 @@ public class GameScenePanel : UIBase
 
     private void GuideTxBtn()
     {
-        if (GameManager.Instance.playerInfo.level == 5)
+        if (GameManager.Instance.gameType == GameType.MainGame && LevelId == 5)
         {
             if (TxElementMananger.Instance != null)
             {

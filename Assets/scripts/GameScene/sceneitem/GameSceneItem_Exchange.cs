@@ -21,7 +21,7 @@ public class GameSceneItem_Exchange : GameSceneItemBase
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
-        cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_Exchange.ToString();
+        RefreshCountText();
 
     }
 

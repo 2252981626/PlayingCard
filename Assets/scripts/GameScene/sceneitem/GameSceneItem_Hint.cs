@@ -19,7 +19,7 @@ public class GameSceneItem_Hint : GameSceneItemBase
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
-        cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_Hint.ToString();
+        RefreshCountText();
 
     }
 

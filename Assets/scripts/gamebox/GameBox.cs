@@ -253,7 +253,7 @@ public class GameBox : MonoBehaviour,IEventListener
 
                 UIManager.Instance.HideUIMask();
                 OtherSdkManager.Instance.CustomEvent("game_box_show", "show", "");
-                if (_lv == 1 || _lv == 2)
+                if (_lv < AdManager.FirstAdLevel)
                 {
                     UIManager.Instance.OpenUI<GeneralRewardsPanel2>(allGetRewards, () =>
                     {

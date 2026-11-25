@@ -24,13 +24,13 @@ public class GameSceneItem_Return : GameSceneItemBase,IEventListener
         unLockTrans.gameObject.SetActive(!isLock);
         lockTrans.gameObject.SetActive(isLock);
 
-        cntStr.text = cnt <= 0 ? "+" : GameManager.Instance.playerInfo.gameSceneItem_Return.ToString();
         Update_ItemReturnInfo();
     }
 
     private void Update_ItemReturnInfo()
     {
         clickBtn.interactable = GameStepRecord.Instance.steps.Count > 0;
+        RefreshCountText();
     }
 
     public override void OnClick()

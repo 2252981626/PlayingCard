@@ -39,10 +39,14 @@ public class GameSceneItemBase : MonoBehaviour
     protected int cnt;
     protected int lockLv = 1;
 
+    private bool CanOpenAddSceneItemPanel => AdManager.CanPlayAds && clickBtn.interactable;
+
     private void Start()
     {
         clickBtn.onClick.AddListener(() =>
         {
+            if (cnt <= 0 && !CanOpenAddSceneItemPanel) return;
+
             AudioManager.Instance.PlayBtnMusic();
             UIManager.Instance.GetUI<GameScenePanel>().RecordNormalOperation();
             OnClick();
@@ -86,6 +90,11 @@ public class GameSceneItemBase : MonoBehaviour
         //        UIManager.Instance.OpenUI<Guide_ItemPanel>(this);
         //    }
         //}
+    }
+
+    protected void RefreshCountText()
+    {
+        cntStr.text = cnt <= 0 && CanOpenAddSceneItemPanel ? "+" : Mathf.Max(0, cnt).ToString();
     }
 
     public virtual void Refresh()

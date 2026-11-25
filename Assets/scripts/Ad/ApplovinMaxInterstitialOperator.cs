@@ -56,7 +56,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     }
     private void Update()
     {
-        if (!isInit) return;
+        if (!isInit || !AdManager.CanPlayAds) return;
         if (GameLoadingPanel.isOpenStatic) return;
         if (ApplovinMaxRewardOperator.isPlayRewardAds) return;
 
@@ -131,12 +131,20 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         }
     }
 
-    public void OnClickInterstitialAd(string _page_id, bool isClick = true)
+    public void OnClickInterstitialAd(string _page_id, bool isClick = true, bool isLevelFourSettlement = false)
     {
         if (!isInit) return;
         if (!inter_enable) return;
         if (isPlayInsertAds) return;
-        if (insertClickCoolingTime > 0) return;
+        if (isLevelFourSettlement)
+        {
+            if (ApplovinMaxRewardOperator.isPlayRewardAds || !NativeMaxSdk.IsInterstitialReady(InsertAdUnitId)) return;
+            insertTimer = insertTime;
+        }
+        else if (!AdManager.CanPlayAds || insertClickCoolingTime > 0)
+        {
+            return;
+        }
 
         insertClickCoolingTime = ad_mau_inter_time;
 
@@ -146,8 +154,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         //    return;
         //}
         //没评分之前
-        string str = PlayerPrefs.GetString("EvaluationGame", "");
-        if (string.IsNullOrEmpty(str))
+        if (!isLevelFourSettlement && string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", "")))
         {
             return;
         }
