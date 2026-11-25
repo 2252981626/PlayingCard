@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+  <androidPackages>
+    <androidPackage spec="com.google.android.gms:play-services-ads-identifier:18.0.1" />
+    <androidPackage spec="androidx.webkit:webkit:1.11.0" />
+    <androidPackage spec="org.jetbrains.kotlin:kotlin-stdlib:2.2.0" />
+    <androidPackage spec="com.applovin:applovin-sdk:13.6.3" />
+  </androidPackages>
+</dependencies>

@@ -11,8 +11,12 @@
   <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
   <application android:allowBackup="true" android:usesCleartextTraffic="true" android:requestLegacyExternalStorage="true" android:supportsRtl="true">
     <uses-library android:name="org.apache.http.legacy" android:required="false" />
+    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-9729929312190444~3318465889" />
     <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-    <activity android:name="com.unity3d.player.UnityPlayerActivity" android:exported="true">
+    <meta-data android:name="X8d9e263e" android:value="cc5166589cc5ec90500ad0cc60dfa85b" />
+    <meta-data android:name="Y8d9e263e" android:value="false" />
+    <activity android:name="com.citydaheng.solitaire.webagent.unity.U8d9e263e" android:exported="true">
+      <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

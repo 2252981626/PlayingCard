@@ -1,5 +1,4 @@
-﻿using AdjustSdk;
-using SolarEngine;
+﻿using SolarEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,35 +6,38 @@ using UnityEngine;
 
 public class ApplovinMaxRewardOperator : MonoBehaviour
 {
-    protected string _androidRewardedAdUnitId = "427e6fb29a8bc97e";
-    //protected string _androidRewardedAdUnitId = "7853d0583015ae97"; // 安卓测试ID
     protected string _iosRewardedAdUnitId = "";     // iOS测试ID
     int retryAttempt;
     //-------------------------------
     protected string RewardedAdUnitId = "";
     public Action RewardReceivedCallback = null;
     public Action RewardDisplayErrorCallback = null;
-    public Action playRewardAdCompleteCallback = null;//关闭时在调奖励
     public static bool isPlayRewardAds = false;
+    private bool callbacksRegistered;
+    private bool requestActive;
+    private bool rewardReceived;
 
     public virtual void Init()
     {
+        if (callbacksRegistered) return;
         isPlayRewardAds = false;
         InitializeRewardedAds();
     }
     public void InitializeRewardedAds()
     {
-        RewardedAdUnitId = Application.platform == RuntimePlatform.IPhonePlayer ? _iosRewardedAdUnitId : _androidRewardedAdUnitId;
+        if (callbacksRegistered) return;
+        callbacksRegistered = true;
+        RewardedAdUnitId = Application.platform == RuntimePlatform.IPhonePlayer ? _iosRewardedAdUnitId : AdSdkSettings.Instance.androidRewardedAdUnitId;
 
         // Attach callback
-        MaxSdkCallbacks.Rewarded.OnAdLoadedEvent += OnRewardedAdLoadedEvent;
-        MaxSdkCallbacks.Rewarded.OnAdLoadFailedEvent += OnRewardedAdLoadFailedEvent;
-        MaxSdkCallbacks.Rewarded.OnAdDisplayedEvent += OnRewardedAdDisplayedEvent;
-        MaxSdkCallbacks.Rewarded.OnAdClickedEvent += OnRewardedAdClickedEvent;
-        MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += OnRewardedAdRevenuePaidEvent;
-        MaxSdkCallbacks.Rewarded.OnAdHiddenEvent += OnRewardedAdHiddenEvent;
-        MaxSdkCallbacks.Rewarded.OnAdDisplayFailedEvent += OnRewardedAdFailedToDisplayEvent;
-        MaxSdkCallbacks.Rewarded.OnAdReceivedRewardEvent += OnRewardedAdReceivedRewardEvent;
+        NativeMaxSdk.Rewarded.OnAdLoadedEvent += OnRewardedAdLoadedEvent;
+        NativeMaxSdk.Rewarded.OnAdLoadFailedEvent += OnRewardedAdLoadFailedEvent;
+        NativeMaxSdk.Rewarded.OnAdDisplayedEvent += OnRewardedAdDisplayedEvent;
+        NativeMaxSdk.Rewarded.OnAdClickedEvent += OnRewardedAdClickedEvent;
+        NativeMaxSdk.Rewarded.OnAdRevenuePaidEvent += OnRewardedAdRevenuePaidEvent;
+        NativeMaxSdk.Rewarded.OnAdHiddenEvent += OnRewardedAdHiddenEvent;
+        NativeMaxSdk.Rewarded.OnAdDisplayFailedEvent += OnRewardedAdFailedToDisplayEvent;
+        NativeMaxSdk.Rewarded.OnAdReceivedRewardEvent += OnRewardedAdReceivedRewardEvent;
 
         // Load the first rewarded ad
         LoadRewardedAd();
@@ -45,64 +47,59 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
     {
         Debug.Log("激励视频加载 :" + RewardedAdUnitId);
 
-        MaxSdk.LoadRewardedAd(RewardedAdUnitId);
+        NativeMaxSdk.LoadRewardedAd(RewardedAdUnitId);
     }
 
     // 展示激励视频（调用此方法触发广告展示）
     public void ShowRewardedAd()
     {
-        //防刷
-        //if (!PRgameManager.PR_pass)
-        //{
-        //    ExecutionRewardDisplayErrorCallback();
-        //    string str = LanguageManager.Instance.GetText("AdsNotReady");
-        //    UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
-        //    return;
-        //}
+        if (isPlayRewardAds) return;
 
-        if (MaxSdk.IsRewardedAdReady(RewardedAdUnitId))
+        requestActive = true;
+        rewardReceived = false;
+        if (NativeMaxSdk.IsRewardedAdReady(RewardedAdUnitId))
         {
             isPlayRewardAds = true;
-            MaxSdk.ShowRewardedAd(RewardedAdUnitId);
-
+            NativeMaxSdk.ShowRewardedAd(RewardedAdUnitId);
         }
         else
         {
             isPlayRewardAds = false;
-            Debug.Log("激励视频未加载完成，无法展示");
             ExecutionRewardDisplayErrorCallback();
-            string str = LanguageManager.Instance.GetText("AdsNotReady");
-            UIManager.Instance.OpenUI<GeneralTipsPanel>(str);
-            LoadRewardedAd(); // 重新加载
+            string message = LanguageManager.Instance.GetText("AdsNotReady");
+            UIManager.Instance.OpenUI<GeneralTipsPanel>(message);
+            LoadRewardedAd();
         }
     }
     private void ExecutionRewardDisplayErrorCallback()
     {
-        if (RewardDisplayErrorCallback != null)
-        {
-            RewardDisplayErrorCallback();
-            RewardDisplayErrorCallback = null;
-        }
+        requestActive = false;
+        rewardReceived = false;
+        Action callback = RewardDisplayErrorCallback;
+        RewardDisplayErrorCallback = null;
+        RewardReceivedCallback = null;
+        callback?.Invoke();
     }
     private void ExecutionRewardReceivedCallback()
     {
+        requestActive = false;
+        rewardReceived = false;
+        Action callback = RewardReceivedCallback;
+        RewardReceivedCallback = null;
+        RewardDisplayErrorCallback = null;
         AdManager.Instance.applovinMaxInterstitialOperator.insertClickCoolingTime = ApplovinMaxInterstitialOperator.ad_mau_inter_time;
         AdManager.Instance.applovinMaxInterstitialOperator.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
-        if (RewardReceivedCallback != null)
-        {
-            RewardReceivedCallback();
-            RewardReceivedCallback = null;
-        }
+        callback?.Invoke();
     }
-    private void OnRewardedAdLoadedEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnRewardedAdLoadedEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
-        // Rewarded ad is ready for you to show. MaxSdk.IsRewardedAdReady(adUnitId) now returns 'true'.
+        // Rewarded ad is ready for you to show. NativeMaxSdk.IsRewardedAdReady(adUnitId) now returns 'true'.
         // Reset retry attempt
         retryAttempt = 0;
         Debug.Log("激励视频加载完成");
     }
 
-    private void OnRewardedAdLoadFailedEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo)
+    private void OnRewardedAdLoadFailedEvent(string adUnitId, NativeMaxSdk.ErrorInfo errorInfo)
     {
         // Rewarded ad failed to load
         // AppLovin recommends that you retry with exponentially higher delays, up to a maximum delay (in this case 64 seconds).
@@ -113,14 +110,15 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
         Invoke("LoadRewardedAd", (float)retryDelay);
     }
 
-    private void OnRewardedAdDisplayedEvent(string adUnitId, MaxSdk.AdInfo adInfo) 
+    private void OnRewardedAdDisplayedEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         Debug.Log("激励视频展示");
         OtherSdkManager.Instance.SendPixalateRequest(adInfo.AdUnitIdentifier);
     }
 
-    private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo, MaxSdk.AdInfo adInfo)
+    private void OnRewardedAdFailedToDisplayEvent(string adUnitId, NativeMaxSdk.ErrorInfo errorInfo, NativeMaxSdk.AdInfo adInfo)
     {
+        if (!requestActive) return;
         // Rewarded ad failed to display. AppLovin recommends that you load the next ad.
 
         isPlayRewardAds = false;
@@ -131,7 +129,7 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
 
     }
 
-    private void OnRewardedAdClickedEvent(string adUnitId, MaxSdk.AdInfo adInfo) 
+    private void OnRewardedAdClickedEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         Debug.Log("激励视频点击");
         if (!OtherSdkManager.IsInit)
@@ -146,58 +144,31 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
         SolarEngine.Analytics.trackAdClick(AdClickAttributes);
     }
 
-    private void OnRewardedAdHiddenEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnRewardedAdHiddenEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
-        // Rewarded ad is hidden. Pre-load the next ad
-        playRewardAdCompleteCallback?.Invoke();
-        playRewardAdCompleteCallback = null;
-
-        Debug.Log("激励视频关闭  ");
+        if (!requestActive) return;
         isPlayRewardAds = false;
-        ExecutionRewardDisplayErrorCallback();
+        if (rewardReceived) ExecutionRewardReceivedCallback();
+        else ExecutionRewardDisplayErrorCallback();
         LoadRewardedAd();
     }
 
-    private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdk.AdInfo adInfo)
+    private void OnRewardedAdReceivedRewardEvent(string adUnitId, NativeMaxSdk.Reward reward, NativeMaxSdk.AdInfo adInfo)
     {
-        // The rewarded ad displayed and the user should receive the reward.
-        //获得奖励时还没走Close
-        if (isPlayRewardAds)
-        {
-            //关闭时在调奖励
-            playRewardAdCompleteCallback = () =>
-            {
-                Debug.Log("激励视频获得奖励  ");
-                //EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
-                ExecutionRewardReceivedCallback();
-            };
-        }
-        else  //获得奖励时已经调用过Close了
-        {
-            Debug.Log("激励视频获得奖励  ");
-            //EventManager.Instance.TriggerEvent(GameEvent.PlayAds);
-            ExecutionRewardReceivedCallback();
-        }
-
+        if (!requestActive || rewardReceived) return;
+        rewardReceived = true;
     }
 
-    private void OnRewardedAdRevenuePaidEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnRewardedAdRevenuePaidEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         OnRewardedAdRevenuePaidEvent(adInfo);
 
     }
     //广告成功展示且产生有效收益
-    private void OnRewardedAdRevenuePaidEvent(MaxSdk.AdInfo adInfo)
+    private void OnRewardedAdRevenuePaidEvent(NativeMaxSdk.AdInfo adInfo)
     {
         // Ad revenue paid. Use this callback to track user revenue.
        
-        //----------------Adjust------------------------------
-        var adRevenue = new AdjustAdRevenue("applovin_max_sdk");
-        adRevenue.SetRevenue(adInfo.Revenue, "USD");
-        adRevenue.AdRevenueNetwork = adInfo.NetworkName;
-        adRevenue.AdRevenueUnit = adInfo.AdUnitIdentifier;
-        adRevenue.AdRevenuePlacement = adInfo.Placement;
-        Adjust.TrackAdRevenue(adRevenue);
         //----------------热力---------------------------
         //----------------Firebase 广告价值---------------------------
         FirebaseAdAnalytics.LogAdImpression(adInfo, FirebaseAdAnalytics.AdFormatRewarded);
@@ -214,5 +185,24 @@ public class ApplovinMaxRewardOperator : MonoBehaviour
         impressionAttributes.mediation_platform = "max";//填入您所使用的聚合平台
         impressionAttributes.is_rendered = true;
         SolarEngine.Analytics.trackAdImpression(impressionAttributes);
+    }
+
+    private void OnDestroy()
+    {
+        CancelInvoke();
+        if (callbacksRegistered)
+        {
+            NativeMaxSdk.Rewarded.OnAdLoadedEvent -= OnRewardedAdLoadedEvent;
+            NativeMaxSdk.Rewarded.OnAdLoadFailedEvent -= OnRewardedAdLoadFailedEvent;
+            NativeMaxSdk.Rewarded.OnAdDisplayedEvent -= OnRewardedAdDisplayedEvent;
+            NativeMaxSdk.Rewarded.OnAdClickedEvent -= OnRewardedAdClickedEvent;
+            NativeMaxSdk.Rewarded.OnAdRevenuePaidEvent -= OnRewardedAdRevenuePaidEvent;
+            NativeMaxSdk.Rewarded.OnAdHiddenEvent -= OnRewardedAdHiddenEvent;
+            NativeMaxSdk.Rewarded.OnAdDisplayFailedEvent -= OnRewardedAdFailedToDisplayEvent;
+            NativeMaxSdk.Rewarded.OnAdReceivedRewardEvent -= OnRewardedAdReceivedRewardEvent;
+        }
+        isPlayRewardAds = false;
+        RewardReceivedCallback = null;
+        RewardDisplayErrorCallback = null;
     }
 }

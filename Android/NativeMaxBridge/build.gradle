@@ -1,0 +1,24 @@
+plugins {
+    id 'com.android.library' version '7.4.2'
+}
+
+android {
+    namespace 'com.citydaheng.solitaire.ads'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    compileOnly 'com.applovin:applovin-sdk:13.6.3'
+    compileOnly files('../../Assets/Plugins/Android/sdk-2.0.6.u-del789.top.aar')
+    compileOnly files(providers.gradleProperty('unityClassesJar').get())
+}

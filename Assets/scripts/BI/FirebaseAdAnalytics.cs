@@ -55,7 +55,7 @@ public static class FirebaseAdAnalytics
     /// </summary>
     /// <param name="adInfo">AppLovin MAX 回调带回的广告信息</param>
     /// <param name="adFormat">ad_format 取值，见 <see cref="AdFormatRewarded"/> / <see cref="AdFormatInterstitial"/></param>
-    public static void LogAdImpression(MaxSdk.AdInfo adInfo, string adFormat)
+    public static void LogAdImpression(NativeMaxSdk.AdInfo adInfo, string adFormat)
     {
         if (adInfo == null)
         {

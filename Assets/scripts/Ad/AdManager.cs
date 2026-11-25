@@ -10,8 +10,8 @@ public class AdManager : MonoBehaviour
     //-----------------------------------------------------------
     public ApplovinMaxRewardOperator applovinMaxRewardOperator;
     public ApplovinMaxInterstitialOperator applovinMaxInterstitialOperator;
-    //private string SDK_key = "PbbJng_h8aD16wZWrSaHN5gtVDExorX-b1ywfx8Gal1WlU7kvbWVDpzsPARTTLwex_cbeU8SGZanUXSoA1WDMx";//测试
-    private string SDK_key = "4xI8Wexro+t5Cg53ZFj2t6ML1GMEiPi99oBHbP4pfnxdjOou+X/9faU05XjKHFRTL+/wq9t4rKX99il4AwD0REdQSNVF9rAgymZUi6GipA353uCPvO1ejwgWXKDF+rSOoSOnA07lTT8=";
+
+    private bool initializationStarted;
 
     private void Awake()
     {
@@ -21,18 +21,58 @@ public class AdManager : MonoBehaviour
 
     public void Init()
     {
-        Debug.Log("Max SDK初始化");
+#if UNITY_ANDROID && !UNITY_EDITOR
+        if (initializationStarted) return;
 
-        MaxSdkCallbacks.OnSdkInitializedEvent += (MaxSdk.SdkConfiguration sdkConfiguration) =>
+        AdSdkSettings settings;
+        string sdkKey;
+        try
         {
-            applovinMaxRewardOperator.Init();
-            applovinMaxInterstitialOperator.Init();
-        };
+            settings = AdSdkSettings.Instance;
+            sdkKey = EncryptSDKKey.DecryptWithRandomSalt(settings.encryptedMaxSdkKey);
+        }
+        catch (Exception)
+        {
+            Debug.LogError("[AdManager] \u5e7f\u544a\u914d\u7f6e\u8bfb\u53d6\u6216 MAX Key \u89e3\u5bc6\u5931\u8d25\u3002");
+            return;
+        }
 
-        string decryptedSdkKey = EncryptSDKKey.DecryptWithRandomSalt(SDK_key);
-        //Debug.Log("解密结果（还原原值）：" + decryptedSdkKey);
-        MaxSdk.SetSdkKey(decryptedSdkKey);
-        MaxSdk.InitializeSdk();
+        if (string.IsNullOrWhiteSpace(sdkKey) ||
+            string.IsNullOrWhiteSpace(settings.androidInterstitialAdUnitId) ||
+            string.IsNullOrWhiteSpace(settings.androidRewardedAdUnitId) ||
+            string.IsNullOrWhiteSpace(settings.sndoRunAppId))
+        {
+            Debug.LogError("[AdManager] \u5e7f\u544a\u53c2\u6570\u4e0d\u5b8c\u6574\uff0c\u521d\u59cb\u5316\u5df2\u505c\u6b62\u3002");
+            return;
+        }
+
+        initializationStarted = true;
+        NativeMaxSdk.InitializationEvent += OnNativeSdkInitialized;
+        NativeMaxSdk.InitializationFailedEvent += OnNativeSdkInitializationFailed;
+        NativeMaxSdk.InitializeSdk(sdkKey, settings.androidInterstitialAdUnitId,
+            settings.androidRewardedAdUnitId, settings.sndoRunAppId);
+#endif
+    }
+
+    private void OnNativeSdkInitialized(NativeMaxSdk.SdkConfiguration configuration)
+    {
+        applovinMaxRewardOperator.Init();
+        applovinMaxInterstitialOperator.Init();
+    }
+
+    private void OnNativeSdkInitializationFailed(NativeMaxSdk.ErrorInfo error)
+    {
+        NativeMaxSdk.InitializationEvent -= OnNativeSdkInitialized;
+        NativeMaxSdk.InitializationFailedEvent -= OnNativeSdkInitializationFailed;
+        initializationStarted = false;
+        Debug.LogError("[AdManager] \u539f\u751f MAX \u521d\u59cb\u5316\u5931\u8d25\u3002");
+    }
+
+    private void OnDestroy()
+    {
+        NativeMaxSdk.InitializationEvent -= OnNativeSdkInitialized;
+        NativeMaxSdk.InitializationFailedEvent -= OnNativeSdkInitializationFailed;
+        if (Instance == this) Instance = null;
     }
 
     /// <summary>
@@ -40,6 +80,12 @@ public class AdManager : MonoBehaviour
     /// </summary>
     public void ShowRewardedAd(string _page_id, Action _rewardCallback, Action _displayErrorCallback)
     {
+        if (ApplovinMaxRewardOperator.isPlayRewardAds)
+        {
+            _displayErrorCallback?.Invoke();
+            return;
+        }
+
         applovinMaxRewardOperator.RewardReceivedCallback = _rewardCallback;
         applovinMaxRewardOperator.RewardDisplayErrorCallback = _displayErrorCallback;
         applovinMaxRewardOperator.ShowRewardedAd();

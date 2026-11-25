@@ -1,4 +1,3 @@
-using AdjustSdk;
 using SolarEngine;
 using System;
 using System.Collections;
@@ -8,8 +7,6 @@ using UnityEngine.UI;
 
 public class ApplovinMaxInterstitialOperator : MonoBehaviour
 {
-    private string _androidInterstitialAdUnitId = "9c9dce817740a47c";
-    //private string _androidInterstitialAdUnitId = "075d7d1b3dcbd8e1"; // 安卓测试ID
     private string _iosInterstitialAdUnitId = "";     // iOS测试ID
     int retryAttempt;
     //-------------------------------
@@ -42,6 +39,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     private bool isPlayInsertAds = false;
 
     private bool isInit = false;
+    private bool callbacksRegistered;
     private string admobNetworkName;
     private bool isAdLoading;
 
@@ -49,6 +47,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     private string page_id;
 	public void Init()
     {
+        if (callbacksRegistered) return;
         insertTimer = startInsertTime;
         isPlayInsertAds = false;
 
@@ -79,16 +78,18 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
 
     public void InitializeInterstitialAds()
     {
-        InsertAdUnitId = Application.platform == RuntimePlatform.IPhonePlayer ? _iosInterstitialAdUnitId : _androidInterstitialAdUnitId;
+        if (callbacksRegistered) return;
+        callbacksRegistered = true;
+        InsertAdUnitId = Application.platform == RuntimePlatform.IPhonePlayer ? _iosInterstitialAdUnitId : AdSdkSettings.Instance.androidInterstitialAdUnitId;
 
         // Attach callback
-        MaxSdkCallbacks.Interstitial.OnAdLoadedEvent += OnInterstitialLoadedEvent;
-        MaxSdkCallbacks.Interstitial.OnAdLoadFailedEvent += OnInterstitialLoadFailedEvent;
-        MaxSdkCallbacks.Interstitial.OnAdDisplayedEvent += OnInterstitialDisplayedEvent;
-        MaxSdkCallbacks.Interstitial.OnAdClickedEvent += OnInterstitialClickedEvent;
-        MaxSdkCallbacks.Interstitial.OnAdHiddenEvent += OnInterstitialHiddenEvent;
-        MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent += OnInterstitialAdFailedToDisplayEvent;
-        MaxSdkCallbacks.Interstitial.OnAdRevenuePaidEvent += OnInterstitialAdRevenuePaidEvent;
+        NativeMaxSdk.Interstitial.OnAdLoadedEvent += OnInterstitialLoadedEvent;
+        NativeMaxSdk.Interstitial.OnAdLoadFailedEvent += OnInterstitialLoadFailedEvent;
+        NativeMaxSdk.Interstitial.OnAdDisplayedEvent += OnInterstitialDisplayedEvent;
+        NativeMaxSdk.Interstitial.OnAdClickedEvent += OnInterstitialClickedEvent;
+        NativeMaxSdk.Interstitial.OnAdHiddenEvent += OnInterstitialHiddenEvent;
+        NativeMaxSdk.Interstitial.OnAdDisplayFailedEvent += OnInterstitialAdFailedToDisplayEvent;
+        NativeMaxSdk.Interstitial.OnAdRevenuePaidEvent += OnInterstitialAdRevenuePaidEvent;
 
         isAdLoading = false;
         // Load the first interstitial
@@ -101,22 +102,22 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     private void ShowInterstitialAd()
     {
 
-        if (MaxSdk.IsInterstitialReady(InsertAdUnitId))
+        if (NativeMaxSdk.IsInterstitialReady(InsertAdUnitId))
         {
             if (!string.IsNullOrEmpty(admobNetworkName) && admobNetworkName.ToLower().Contains("admob"))
             {
                 // 包含admob的逻辑
                 isPlayInsertAds = true;
-                MaxSdk.ShowInterstitial(InsertAdUnitId);
+                NativeMaxSdk.ShowInterstitial(InsertAdUnitId);
                 //UIManager.Instance.OpenUI<AdBreakPanel>(null, () =>
                 //{
-                //    MaxSdk.ShowInterstitial(InsertAdUnitId);
+                //    NativeMaxSdk.ShowInterstitial(InsertAdUnitId);
                 //});
             }
             else
             {
                 isPlayInsertAds = true;
-                MaxSdk.ShowInterstitial(InsertAdUnitId);
+                NativeMaxSdk.ShowInterstitial(InsertAdUnitId);
             }
         }
         else
@@ -163,14 +164,14 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         isAdLoading = true;
         Debug.Log("开始加载插屏广告");
 
-        MaxSdk.LoadInterstitial(InsertAdUnitId);
+        NativeMaxSdk.LoadInterstitial(InsertAdUnitId);
 
 
     }
 
-    private void OnInterstitialLoadedEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnInterstitialLoadedEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
-        // Interstitial ad is ready for you to show. MaxSdk.IsInterstitialReady(adUnitId) now returns 'true'
+        // Interstitial ad is ready for you to show. NativeMaxSdk.IsInterstitialReady(adUnitId) now returns 'true'
 
         // Reset retry attempt
         isAdLoading = false;
@@ -179,7 +180,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         Debug.Log("插屏广告加载成功 ");
     }
 
-    private void OnInterstitialLoadFailedEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo)
+    private void OnInterstitialLoadFailedEvent(string adUnitId, NativeMaxSdk.ErrorInfo errorInfo)
     {
         // Interstitial ad failed to load
         // AppLovin recommends that you retry with exponentially higher delays, up to a maximum delay (in this case 64 seconds)
@@ -190,7 +191,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         Invoke("LoadInterstitial", (float)retryDelay);
     }
 
-    private void OnInterstitialDisplayedEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnInterstitialDisplayedEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         Debug.Log("插屏广告展示成功");
         OtherSdkManager.Instance.SendPixalateRequest(adInfo.AdUnitIdentifier);
@@ -204,7 +205,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         }
     }
 
-    private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, MaxSdk.ErrorInfo errorInfo, MaxSdk.AdInfo adInfo)
+    private void OnInterstitialAdFailedToDisplayEvent(string adUnitId, NativeMaxSdk.ErrorInfo errorInfo, NativeMaxSdk.AdInfo adInfo)
     {
         // Interstitial ad failed to display. AppLovin recommends that you load the next ad.
         Debug.LogError($"插屏广告展示失败 ");
@@ -212,7 +213,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         LoadInterstitial();
     }
 
-    private void OnInterstitialClickedEvent(string adUnitId, MaxSdk.AdInfo adInfo) 
+    private void OnInterstitialClickedEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         Debug.Log("插屏广告被点击");
         if (!OtherSdkManager.IsInit)
@@ -228,7 +229,7 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         Debug.Log("上报广告被点击");
     }
 
-    private void OnInterstitialHiddenEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnInterstitialHiddenEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         // Interstitial ad is hidden. Pre-load the next ad.
         Debug.Log("插屏广告已关闭");
@@ -241,23 +242,16 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         }
     }
 
-    private void OnInterstitialAdRevenuePaidEvent(string adUnitId, MaxSdk.AdInfo adInfo)
+    private void OnInterstitialAdRevenuePaidEvent(string adUnitId, NativeMaxSdk.AdInfo adInfo)
     {
         OnInterstitialAdRevenuePaidEvent(adInfo);
     }
 
     //广告成功展示且产生有效收益
-    private void OnInterstitialAdRevenuePaidEvent(MaxSdk.AdInfo adInfo)
+    private void OnInterstitialAdRevenuePaidEvent(NativeMaxSdk.AdInfo adInfo)
     {
         // Ad revenue paid. Use this callback to track user revenue.
 
-        //----------------Adjust------------------------------
-        var adRevenue = new AdjustAdRevenue("applovin_max_sdk");
-        adRevenue.SetRevenue(adInfo.Revenue, "USD");
-        adRevenue.AdRevenueNetwork = adInfo.NetworkName;
-        adRevenue.AdRevenueUnit = adInfo.AdUnitIdentifier;
-        adRevenue.AdRevenuePlacement = adInfo.Placement;
-        Adjust.TrackAdRevenue(adRevenue);
         //----------------热力---------------------------
         //----------------Firebase 广告价值---------------------------
         FirebaseAdAnalytics.LogAdImpression(adInfo, FirebaseAdAnalytics.AdFormatInterstitial);
@@ -274,5 +268,22 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         impressionAttributes.mediation_platform = "max";//填入您所使用的聚合平台
         impressionAttributes.is_rendered = true;
         SolarEngine.Analytics.trackAdImpression(impressionAttributes);
+    }
+
+    private void OnDestroy()
+    {
+        CancelInvoke();
+        if (callbacksRegistered)
+        {
+            NativeMaxSdk.Interstitial.OnAdLoadedEvent -= OnInterstitialLoadedEvent;
+            NativeMaxSdk.Interstitial.OnAdLoadFailedEvent -= OnInterstitialLoadFailedEvent;
+            NativeMaxSdk.Interstitial.OnAdDisplayedEvent -= OnInterstitialDisplayedEvent;
+            NativeMaxSdk.Interstitial.OnAdClickedEvent -= OnInterstitialClickedEvent;
+            NativeMaxSdk.Interstitial.OnAdHiddenEvent -= OnInterstitialHiddenEvent;
+            NativeMaxSdk.Interstitial.OnAdDisplayFailedEvent -= OnInterstitialAdFailedToDisplayEvent;
+            NativeMaxSdk.Interstitial.OnAdRevenuePaidEvent -= OnInterstitialAdRevenuePaidEvent;
+        }
+        isInit = false;
+        isPlayInsertAds = false;
     }
 }
