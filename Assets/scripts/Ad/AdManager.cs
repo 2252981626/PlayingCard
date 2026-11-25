@@ -141,7 +141,7 @@ public class AdManager : MonoBehaviour
         if (!CanPlayAds || interstitial.insertClickCoolingTime > 0) return;
 
         interstitial.insertClickCoolingTime = ApplovinMaxInterstitialOperator.ad_mau_inter_time;
-        if (string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", ""))) return;
+        //if (string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", ""))) return;
 
         interstitial.ShowInterstitialAd(_page_id, isClick);
     }
