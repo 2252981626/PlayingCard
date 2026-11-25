@@ -29,7 +29,7 @@ public class GeneralRewardsPanel3 : UIBase
         collectBtn.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            AdManager.Instance.OnClickInterstitialAd("LuckyWheelRewardsPanel");
+            AdManager.Instance.ShowInterstitialDirectly("LuckyWheelRewardsPanel");
             CollectClick();
         });
     }
@@ -58,7 +58,7 @@ public class GeneralRewardsPanel3 : UIBase
             unit = LanguageManager.Instance.GetText_Encrypt("Special_Diamond__unit");
         }
         collectText.text = $"{LanguageManager.Instance.GetText("OnlyClaim")} {unit}{MathF.Round(itemDatas[0].count / 10f, 2)}";
-        rewardAdButton.Init(AdsCallback, page_id, _isContainGold);
+        rewardAdButton.Init(AdsCallback, page_id, _isContainGold, ignoreLevelLimit: true);
     }
 
     private void AdsCallback()

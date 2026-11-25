@@ -266,7 +266,7 @@ public class GameWinPanel : UIBase
             playerInfoUI.DiamondCanvasRecover();
             if (isLevelFourSettlement)
             {
-                AdManager.Instance.OnClickInterstitialAd(page_id, isLevelFourSettlement: true);
+                AdManager.Instance.ShowInterstitialDirectly(page_id);
             }
             Hide();
         });

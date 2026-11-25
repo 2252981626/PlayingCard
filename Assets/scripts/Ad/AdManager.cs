@@ -34,6 +34,25 @@ public class AdManager : MonoBehaviour
         Init();
     }
 
+    private void Update()
+    {
+        var interstitial = applovinMaxInterstitialOperator;
+        if (interstitial == null || !interstitial.isActiveAndEnabled || !interstitial.IsInitializedAndIdle) return;
+        if (!CanPlayAds || GameLoadingPanel.isOpenStatic || ApplovinMaxRewardOperator.isPlayRewardAds) return;
+
+        float deltaTime = Time.deltaTime;
+        interstitial.insertTimer -= deltaTime;
+        if (interstitial.insertTimer <= 0 && interstitial.insertClickCoolingTime <= 0)
+        {
+            interstitial.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
+            OnClickInterstitialAd("auto_interstitial_show", false);
+        }
+        if (interstitial.insertClickCoolingTime > 0)
+        {
+            interstitial.insertClickCoolingTime -= deltaTime;
+        }
+    }
+
     public void Init()
     {
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -93,11 +112,11 @@ public class AdManager : MonoBehaviour
     /// <summary>
     /// 激励广告(有)
     /// </summary>
-    public void ShowRewardedAd(string _page_id, Action _rewardCallback, Action _displayErrorCallback)
+    public void ShowRewardedAd(string _page_id, Action _rewardCallback, Action _displayErrorCallback, bool ignoreLevelLimit = false)
     {
-        if (!CanPlayAds)
+        if (!ignoreLevelLimit && !CanPlayAds)
         {
-            ShowRewardedAd2(_page_id, _rewardCallback, _displayErrorCallback);
+            _rewardCallback?.Invoke();
             return;
         }
 
@@ -113,23 +132,29 @@ public class AdManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 激励广告(无)
-    /// </summary>
-    public void ShowRewardedAd2(string _page_id, Action _rewardCallback, Action _displayErrorCallback)
-    {
-        DOTween.Sequence().AppendInterval(0.5F).AppendCallback(() =>
-        {
-            _rewardCallback?.Invoke();
-
-        });
-    }
-
-    /// <summary>
     /// 插屏广告
     /// </summary>
-    public void OnClickInterstitialAd(string _page_id, bool isClick = true, bool isLevelFourSettlement = false)
+    public void OnClickInterstitialAd(string _page_id, bool isClick = true)
     {
-        applovinMaxInterstitialOperator.OnClickInterstitialAd(_page_id, isClick, isLevelFourSettlement);
+        var interstitial = applovinMaxInterstitialOperator;
+        if (!interstitial.IsInitializedAndIdle || !ApplovinMaxInterstitialOperator.inter_enable) return;
+        if (!CanPlayAds || interstitial.insertClickCoolingTime > 0) return;
+
+        interstitial.insertClickCoolingTime = ApplovinMaxInterstitialOperator.ad_mau_inter_time;
+        if (string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", ""))) return;
+
+        interstitial.ShowInterstitialAd(_page_id, isClick);
+    }
+
+    public void ShowInterstitialDirectly(string pageId)
+    {
+        var interstitial = applovinMaxInterstitialOperator;
+        if (!interstitial.IsInitializedAndIdle || !ApplovinMaxInterstitialOperator.inter_enable) return;
+        if (ApplovinMaxRewardOperator.isPlayRewardAds || !interstitial.IsReady) return;
+
+        interstitial.insertTimer = ApplovinMaxInterstitialOperator.insertTime;
+        interstitial.insertClickCoolingTime = ApplovinMaxInterstitialOperator.ad_mau_inter_time;
+        interstitial.ShowInterstitialAd(pageId, true);
     }
 
 

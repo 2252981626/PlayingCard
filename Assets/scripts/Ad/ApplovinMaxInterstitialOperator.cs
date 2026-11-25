@@ -45,6 +45,10 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
 
     private bool IsClick;
     private string page_id;
+
+    internal bool IsInitializedAndIdle => isInit && !isPlayInsertAds;
+    internal bool IsReady => NativeMaxSdk.IsInterstitialReady(InsertAdUnitId);
+
 	public void Init()
     {
         if (callbacksRegistered) return;
@@ -53,27 +57,6 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
 
         InitializeInterstitialAds();
         isInit = true;
-    }
-    private void Update()
-    {
-        if (!isInit || !AdManager.CanPlayAds) return;
-        if (GameLoadingPanel.isOpenStatic) return;
-        if (ApplovinMaxRewardOperator.isPlayRewardAds) return;
-
-        if (!isPlayInsertAds)
-        {
-            insertTimer -= Time.deltaTime;
-            if (insertTimer <= 0 && insertClickCoolingTime <= 0)
-            {
-                insertTimer = insertTime;
-                OnClickInterstitialAd("auto_interstitial_show", false);
-
-            }
-            if (insertClickCoolingTime > 0)
-            {
-                insertClickCoolingTime -= Time.deltaTime;
-            }
-        }
     }
 
     public void InitializeInterstitialAds()
@@ -99,10 +82,11 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
     /// <summary>
     /// 展示插屏广告
     /// </summary>
-    private void ShowInterstitialAd()
+    internal void ShowInterstitialAd(string pageId, bool isClick)
     {
-
-        if (NativeMaxSdk.IsInterstitialReady(InsertAdUnitId))
+        IsClick = isClick;
+        page_id = pageId;
+        if (IsReady)
         {
             if (!string.IsNullOrEmpty(admobNetworkName) && admobNetworkName.ToLower().Contains("admob"))
             {
@@ -131,37 +115,6 @@ public class ApplovinMaxInterstitialOperator : MonoBehaviour
         }
     }
 
-    public void OnClickInterstitialAd(string _page_id, bool isClick = true, bool isLevelFourSettlement = false)
-    {
-        if (!isInit) return;
-        if (!inter_enable) return;
-        if (isPlayInsertAds) return;
-        if (isLevelFourSettlement)
-        {
-            if (ApplovinMaxRewardOperator.isPlayRewardAds || !NativeMaxSdk.IsInterstitialReady(InsertAdUnitId)) return;
-            insertTimer = insertTime;
-        }
-        else if (!AdManager.CanPlayAds || insertClickCoolingTime > 0)
-        {
-            return;
-        }
-
-        insertClickCoolingTime = ad_mau_inter_time;
-
-        //防刷
-        //if (!PRgameManager.PR_pass)
-        //{
-        //    return;
-        //}
-        //没评分之前
-        if (!isLevelFourSettlement && string.IsNullOrEmpty(PlayerPrefs.GetString("EvaluationGame", "")))
-        {
-            return;
-        }
-        IsClick = isClick;
-        page_id = _page_id;
-        ShowInterstitialAd();
-    }
     private void LoadInterstitial()
     {
         if (isAdLoading)

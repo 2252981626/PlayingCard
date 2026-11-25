@@ -14,7 +14,7 @@ public class RewardAdButton : MonoBehaviour
 
     private string page_id;
     private bool isContainGold;
-    public void Init(Action _adsCallback,string _page_id ,bool _isContainGold)
+    public void Init(Action _adsCallback, string _page_id, bool _isContainGold, bool ignoreLevelLimit = false)
     {
         adsCallback = _adsCallback;
         page_id = _page_id;
@@ -23,16 +23,16 @@ public class RewardAdButton : MonoBehaviour
         adsBtn.onClick.AddListener(() =>
         {
             AudioManager.Instance.PlayBtnMusic();
-            AdsOnClick();
+            AdsOnClick(ignoreLevelLimit);
         });
 
         UpdateAdsBtnState(true);
         isGetAdsReward = false;
 
-        adIcon.gameObject.SetActive(AdManager.ShowAdIcon && AdManager.CanPlayAds);
+        adIcon.gameObject.SetActive(AdManager.ShowAdIcon && (ignoreLevelLimit || AdManager.CanPlayAds));
     }
 
-    private void AdsOnClick()
+    private void AdsOnClick(bool ignoreLevelLimit)
     {
         UpdateAdsBtnState(false);
         Debug.Log("²¥·Å¼¤Àø¹ã¸æ page_id :" + page_id);
@@ -42,7 +42,8 @@ public class RewardAdButton : MonoBehaviour
             AdManager.Instance.ShowRewardedAd(
                  page_id,
                  AdsCallback,
-                 AdsPlayError
+                 AdsPlayError,
+                 ignoreLevelLimit
            );
         }
         else
@@ -50,7 +51,8 @@ public class RewardAdButton : MonoBehaviour
             AdManager.Instance.ShowRewardedAd(
                  page_id,
                  AdsCallback,
-                 AdsPlayError
+                 AdsPlayError,
+                 ignoreLevelLimit
                );
         }
     }
